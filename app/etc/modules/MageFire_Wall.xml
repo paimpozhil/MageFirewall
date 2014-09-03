@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageFire_Wall>
+            <active>true</active>
+            <codePool>local</codePool>
+        </MageFire_Wall>
+    </modules>
+</config> 
