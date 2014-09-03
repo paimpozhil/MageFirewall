@@ -8,5 +8,6 @@ Magento Firewall for securing your e-commerce system.
 
 ## Install
 
-use install.sh
-
+```
+curl https://raw.githubusercontent.com/paimpozhil/MageFirewall/master/install.sh | sh
+```
