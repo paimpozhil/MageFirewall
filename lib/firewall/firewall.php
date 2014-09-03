@@ -31,8 +31,8 @@
     $clientIp = $_SERVER['REMOTE_ADDR'];
     $blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
     $blackListResults = $readConnection->fetchAll($blackListQuery);
-	if(!Mage::helper('core')->isModuleEnabled('Mage_Wall')){
-		return;
+	if(!Mage::helper('core')->isModuleEnabled('MageFire_Wall')){
+		//return;
 	}
 define('NF_STARTTIME', microtime(true));
 
@@ -40,7 +40,7 @@ define('NF_STARTTIME', microtime(true));
 //@$dbh = new mysqli($db_ip, $db_user, $db_pass, $db_name, $db_port);
 
 $db_ip = $db_port = $db_user = $db_pass = '';
-//get debug mode 
+//get debug mode is enable
 	$query = 'SELECT * FROM ' . $resource->getTableName('ncjgb_nf_options');
     $results = $readConnection->fetchAll($query);    
 	$MagenfCheckDebug = 2; // $results['0']['debug'];
@@ -143,6 +143,7 @@ function nf_check_request() {
    global $MagenfCheckDebug;
    global $MagenfoptionApplication;
    global $nfdebug;
+
 	$rules_count = 0;	
     $query = 'SELECT * FROM ' . $resource->getTableName('firewall_rules'). ' WHERE `who` REGEXP "^('. $MagenfoptionApplication .')$" && `enabled` = "1"';
     $results = $readConnection->fetchAll($query);
@@ -183,15 +184,15 @@ function nf_check_request() {
             if (! $GLOBALS['_' . $sub_value[0]] [$sub_value[1]]) {continue;}
 				if ( preg_match('`'. $rulesData['what'] .'`', $GLOBALS['_' . $sub_value[0]] [$sub_value[1]]) ) {
 					if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   '.$sub_value[0].':'.$sub_value[1].' : ' . $rulesData['why'] . ' (#'. $rulesData['id'] . ')' . ETAG; }
-					nf_write2log($rulesData['why'], $sub_value[0].':'.$sub_value[1].' = ' . $GLOBALS['_' . $sub_value[0]] [$sub_value[1]], $rulesData['level'], $rulesData['id']);
+					nf_write2log($rulesData['why'], $sub_value[0].':'.$sub_value[1].' = ' . $GLOBALS['_' . $sub_value[0]] [$sub_value[1]], $rulesData['level'], $rulesData['rules_id']);
 					nf_block();
 				}
 
          } elseif ( isset($_SERVER[$where]) ) {
             $rules_count++;
 				if ( preg_match('`'. $rulesData['what'] .'`', $_SERVER[$where]) ) {
-               if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   ' . $where.' : ' . $rulesData['why'] . ' (#'. $rulesData['id'] . ')' . ETAG; }
-               nf_write2log($rulesData['why'], $where . ':' . $_SERVER[$where], $rulesData['level'], $rulesData['id']);
+               if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   ' . $where.' : ' . $rulesData['why'] . ' (#'. $rulesData['rules_id'] . ')' . ETAG; }
+               nf_write2log($rulesData['why'], $where . ':' . $_SERVER[$where], $rulesData['level'], $rulesData['rules_id']);
                nf_block();
             }
          }
@@ -339,23 +340,23 @@ function nf_write2log( $loginfo, $logdata, $loglevel, $ruleid ) {
 		$http_ret_code = '403 Forbidden';
 	}
 
-	$LOG_FILE = dirname(__FILE__) . '/logs/firewall_' . date('Y-m') . '.log';
+	/*$LOG_FILE = dirname(__FILE__) . '/var/logs/firewall_' . date('Y-m') . '.log';
 	if (! $handle = fopen($LOG_FILE, 'a') ) {
 		if ($MagenfCheckDebug) { $nfdebug.= STAG .'unable to write to log'. "\t" . '[ERROR]  ' . $LOG_FILE . ETAG; }
 		return;
-	}
+	}*/
 
-   if (strlen($logdata) > 100) { $logdata = substr($logdata, 0, 100) . '...'; }
+   //if (strlen($logdata) > 100) { $logdata = substr($logdata, 0, 100) . '...'; }
 
-   fwrite($handle,
-      '[' . time() . '] [' . nf_benchmarks() . '] ' .
+    $message =   '[' . time() . '] [' . nf_benchmarks() . '] ' .
       '[' . $_SERVER['SERVER_NAME'] . '] ' . '[#' . $rand_value . '-' . $ruleid . '] ' .
       '[' . $loglevel . '] ' . '[' . $_SERVER['REMOTE_ADDR'] . '] ' .
       '[' . $http_ret_code . '] ' . '[' . $_SERVER['REQUEST_METHOD'] . '] ' .
       '[' . $_SERVER['SCRIPT_NAME'] . '] ' . '[' . $loginfo . '] ' .
-      '[' . nf_bin2hex_string($logdata) . ']' . "\n"
-   );
-   fclose($handle);
+      '[' . nf_bin2hex_string($logdata) . ']' . "\n";
+   
+   Mage::log($message, null, "firewall_-".date('Y-m-d').".log");
+  // fclose($handle);
 }
 /* ================================================================ */
 function nf_benchmarks() {
