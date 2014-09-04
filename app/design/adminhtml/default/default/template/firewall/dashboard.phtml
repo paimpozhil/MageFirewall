@@ -1,0 +1,68 @@
+<?php 
+
+function phpinfo_array()
+{
+    ob_start();
+    phpinfo();
+    $info_arr = array();
+    $info_lines = explode("\n", strip_tags(ob_get_clean(), "<tr><td><h2>"));
+    $cat = "General";
+    foreach($info_lines as $line)
+    {
+        // new cat?
+        preg_match("~<h2>(.*)</h2>~", $line, $title) ? $cat = $title[1] : null;
+        if($cat=='Core') 
+        if(preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val))
+        {
+            $info_arr[$cat][$val[1]] = $val[2];
+        }
+        elseif(preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val))
+        {
+            $info_arr[$cat][$val[1]] = array("local" => $val[2], "master" => $val[3]);
+        }
+    }
+    return $info_arr;
+}
+
+
+$news=phpinfo_array();
+$news['Core']['auto_prepend_file']['local'];
+$firewalFile = $news['Core']['auto_prepend_file']['master'];
+$autoprepend = '<b><img src="/skin/adminhtml/default/default/images/error_msg_icon.gif" >   No</b>.';
+if (strpos($firewalFile,'lib/firewall/firewall.php') !== false) {
+    $autoprepend = '<b><img src="/skin/adminhtml/default/default/images/success_msg_icon.gif" >   Yes</b>.';    
+}
+	$FireWallconfigValue = Mage::getStoreConfig('mageFireWall/enable');	
+	$message = '';
+	if(empty($FireWallconfigValue)){
+		$FireWallconfigValue = 1;
+		$fireWallOn = 'Firewall off';
+		$enalbe = 'Enabled';
+		$fireWallEnableMsg = '<b><img src="/skin/adminhtml/default/default/images/error_msg_icon.gif" >   Disabled</b>.';
+	} else if($FireWallconfigValue==1) {
+		$enalbe = 'Disabled';
+		$FireWallconfigValue = 0;
+		$fireWallOn = 'Firewall on';
+		$fireWallEnableMsg = '<b><img src="/skin/adminhtml/default/default/images/success_msg_icon.gif" >   Enabled</b>.';
+	} else {
+		$enalbe = 'Enabled';
+		$message = '<p class="notification-global">Your site is not protected now. Please click enabled button to active.</p>';
+		$fireWallEnableMsg = '<b><img src="/skin/adminhtml/default/default/images/error_msg_icon.gif" >   Disabled</b>.';
+		$FireWallconfigValue = 1;
+		$fireWallOn = 'Firewall off';
+	}
+?>
+<?php echo 'Firewall : '.$fireWallEnableMsg; ?>
+<?php echo $this->__($message) ?>
+	<form id="edit_form" name="edit_form" method="post" action="<?php $this->getUrl('*/*/post')?>">
+        <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+        <h4 ><?php $this->__('This fieldset name')?></h4>
+        <input type="hidden" name="FireWallconfigValue" value="<?php echo $FireWallconfigValue; ?>" />
+        Click here to <?php echo $enalbe; ?> Firewall : <button style="" onclick="firewallConfigForm.submit()" class="form-button" type="button" title="Save Config" id=""><span><span><span><?php echo $this->__($fireWallOn) ?></span></span></span></button>
+    </form>
+    <br>
+    <br>
+<?php echo $this->__('MageFirewall configuration : '.$autoprepend) ?>
+<script type="text/javascript">
+    var firewallConfigForm = new varienForm('edit_form');
+</script>
