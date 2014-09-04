@@ -31,9 +31,8 @@
     $clientIp = $_SERVER['REMOTE_ADDR'];
     $blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
     $blackListResults = $readConnection->fetchAll($blackListQuery);
-	if(!Mage::helper('core')->isModuleEnabled('MageFire_Wall')){
-		//return;
-	}
+	if(!Mage::helper('core')->isModuleEnabled('MageFire_Wall')) return;
+	if(Mage::getStoreConfig('mageFireWall/enable')!=1) return;
 define('NF_STARTTIME', microtime(true));
 
 
@@ -41,11 +40,11 @@ define('NF_STARTTIME', microtime(true));
 
 $db_ip = $db_port = $db_user = $db_pass = '';
 //get debug mode is enable
-	$query = 'SELECT * FROM ' . $resource->getTableName('ncjgb_nf_options');
-    $results = $readConnection->fetchAll($query);    
+	/*$query = 'SELECT * FROM ' . $resource->getTableName('ncjgb_nf_options');
+    $results = $readConnection->fetchAll($query);    */
 	$MagenfCheckDebug = 2; // $results['0']['debug'];
 	$MagenfCheckEnabled = 1; // $results['0']['enabled'];
-	$MagenfoptionApplication = $results['0']['application'];
+	$MagenfoptionApplication = 'generic|option|magento'; //$results['0']['application'];
 /*$dbq = $dbh->query('SELECT * FROM `'. $db_prefix .'nf_options`');
 if (! $dboptions  = $dbq->fetch_object() ) {
 	die('error (line ' . __LINE__ . ') : fetch_object error');
@@ -148,7 +147,7 @@ function nf_check_request() {
     $query = 'SELECT * FROM ' . $resource->getTableName('firewall_rules'). ' WHERE `who` REGEXP "^('. $MagenfoptionApplication .')$" && `enabled` = "1"';
     $results = $readConnection->fetchAll($query);
     foreach($results as $rulesData){
-		$wherelist = explode('|', $rulesData['where']);	
+		$wherelist = explode('|', $rulesData['request']);	
 		foreach ($wherelist as $where) {
 			if ( ($where == 'POST') || ($where == 'GET') ) {
 				foreach ($GLOBALS['_' . $where] as $reqkey => $reqvalue) {

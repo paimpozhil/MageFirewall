@@ -32,10 +32,10 @@ class MageFire_Wall_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Block_Widg
 			'align'     => 'left',
 			'index'     => 'who',
         ));
-        $this->addColumn('where', array(
-			'header'    => Mage::helper('wall')->__('Where'),
+        $this->addColumn('request', array(
+			'header'    => Mage::helper('wall')->__('Request'),
 			'align'     => 'left',
-			'index'     => 'where',
+			'index'     => 'request',
         ));
         $this->addColumn('what', array(
 			'header'    => Mage::helper('wall')->__('What'),

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <MageFire_Wall>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </MageFire_Wall>
     </modules>
     <admin>
@@ -29,6 +29,11 @@
 					</items>
 				</children>-->
                 <children>
+					<dashboard>
+                        <title>Dashboard</title>
+                        <action>wall/adminhtml_dashboard_view</action>
+                        <sort_order>50</sort_order>
+                    </dashboard>
                     <whitelist>
                         <title>White List</title>
                         <action>wall/adminhtml_whitelist</action>

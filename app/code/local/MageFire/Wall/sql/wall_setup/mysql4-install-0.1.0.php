@@ -10,7 +10,7 @@ $installer->run("
 CREATE TABLE {$this->getTable('firewall_rules')} (
   `rules_id` int(11) unsigned NOT NULL auto_increment,
   `who` varchar(255) NOT NULL default '',
-  `where` text NOT NULL default '',
+  `request` text NOT NULL default '',
   `what` text NOT NULL default '',
   `why` text NOT NULL default '',
   `level` text NOT NULL default '',
