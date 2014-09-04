@@ -17,7 +17,7 @@ class MageFire_Wall_Adminhtml_WhitelistController extends Mage_Adminhtml_Control
 	{
 		$this->loadLayout();
 		$this->getResponse()->setBody(
-			   $this->getLayout()->createBlock('wall/adminhtml_wall_grid')->toHtml()
+			   $this->getLayout()->createBlock('wall/adminhtml_whitelist_grid')->toHtml()
 		);
 	}
 	

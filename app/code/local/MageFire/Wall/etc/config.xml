@@ -29,6 +29,11 @@
 					</items>
 				</children>-->
                 <children>
+					<dashboard>
+                        <title>Dashboard</title>
+                        <action>wall/adminhtml_dashboard_view</action>
+                        <sort_order>50</sort_order>
+                    </dashboard>
                     <whitelist>
                         <title>White List</title>
                         <action>wall/adminhtml_whitelist</action>
