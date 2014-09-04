@@ -2,7 +2,7 @@
 <config>
     <modules>
         <MageFire_Wall>
-            <version>0.1.1</version>
+            <version>0.1.0</version>
         </MageFire_Wall>
     </modules>
     <admin>
