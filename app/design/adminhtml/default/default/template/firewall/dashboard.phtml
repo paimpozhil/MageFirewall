@@ -5,14 +5,20 @@
 border-spacing:5em;
   padding-bottom: 1em;
 }
+.critical { color: #D20000; }
 </style>
-<?php $optionsAll = Mage::getModel('wall/options')->getCollection()->getData();
-$firewalFile = ini_get('auto_prepend_file');
+<?php 
+$getIncludedFile = get_included_files(); 
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
-//$autoprependMsg ='Please add these path in your php configuration : '.$rootPath.'/lib/firewall/firewall.php';
+$paths = $rootPath.'/lib/firewall/firewall.php';
+$optionsAll = Mage::getModel('wall/options')->getCollection()->getData();
+$firewalFile = ini_get('auto_prepend_file');
+$autoprependMsg ='<p class="critical">To enable firewall include following path in index.php. <br>/lib/firewall/firewall.php</p>';
 $autoprepend = '<b>No</b>.'; 
- $autoprependimageIcon =   'error_msg_icon.gif';
-if (strpos($firewalFile,'lib/firewall/firewall.php') !== false) {
+$autoprependimageIcon =   'error_msg_icon.gif';
+$firewallDisabled = 0;
+if (strpos($firewalFile,'lib/firewall/firewall.php') !== false || in_array($paths, $getIncludedFile)) {	
+	$firewallDisabled = 1;
 	$autoprependimageIcon =  'success_msg_icon.gif'; 
 	$autoprependMsg ='';
     $autoprepend = '<b>Yes</b>.';    
@@ -26,13 +32,13 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 		<tr>
 			<th scope="row"><?php echo $optionsAll[0]['text']; ?></th>
 			<td width="20" align="left">
-				<?php $imageIcon = ($optionsAll[0]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
+				<?php $imageIcon = ($optionsAll[0]['value']==1 && $firewallDisabled==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
 				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
 			</td>
 			<td align="left">				
 				<input type="hidden" name="fireWall_options[1][option_id]" value="<?php echo $optionsAll[0]['option_id']; ?>">
-				<select style="width:200px" name="fireWall_options[1][value]">
-					<option <?php echo ($optionsAll[0]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
+				<select style="width:200px" name="fireWall_options[1][value]" <?php echo ($firewallDisabled==0) ? "disabled" : ''; ?>>
+				<?php if($firewallDisabled==1) { ?>	<option <?php echo ($optionsAll[0]['value']==1 && $firewallDisabled==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option> <?php } ?>
 					<option <?php echo ($optionsAll[0]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
 				</select>
 			</td>
@@ -40,8 +46,8 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 		<tr>
 			<th scope="row"><?php echo $optionsAll[1]['text']; ?></th>
 			<td width="20" align="left">
-				<?php $imageIcon = ($optionsAll[1]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
-				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
+				<?php //$imageIcon = ($optionsAll[1]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
+				//echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
 			</td>
 			<td align="left">
 				<input type="hidden" name="fireWall_options[2][option_id]" value="<?php echo $optionsAll[1]['option_id']; ?>">
@@ -62,6 +68,7 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 				<select style="width:200px" name="fireWall_options[3][value]" disabled>
 					<option  value="1"> <?php echo $autoprepend; ?></option>
 				</select>
+				<?php if($firewallDisabled==0) { echo $autoprependMsg; } ?>
 			</td>
 		</tr>
 		<tr>
