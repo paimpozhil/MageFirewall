@@ -33,7 +33,12 @@
                         <title>Dashboard</title>
                         <action>wall/adminhtml_dashboard_view</action>
                         <sort_order>50</sort_order>
-                    </dashboard>
+                    </dashboard>                    
+					<recentedittedfiles>
+                        <title>recentedittedfiles</title>
+                        <action>wall/adminhtml_dashboard_recent</action>
+                        <sort_order>60</sort_order>
+                    </recentedittedfiles>
                     <whitelist>
                         <title>White List</title>
                         <action>wall/adminhtml_whitelist</action>
@@ -98,7 +103,10 @@
                     </whitelist>  
                      <blacklist>
                         <table>firewall_blacklist</table>
-                    </blacklist>                  
+                    </blacklist>    
+                     <options>
+                        <table>firewall_options</table>
+                    </options>                 
                 </entities>
             </wall_mysql4>
         </models>
@@ -132,5 +140,17 @@
 				<class>MageFire_Wall_Block</class>
 			</wall>
 		</blocks>
-    </global>
+    </global>    
+    <crontab>
+        <jobs>
+            <wall_delete_log>
+                <schedule>
+                    <cron_expr>0 0 */15 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>wall/cron::deleteOldLogs</model>
+                </run>
+            </wall_delete_log>
+        </jobs>
+    </crontab>
 </config>

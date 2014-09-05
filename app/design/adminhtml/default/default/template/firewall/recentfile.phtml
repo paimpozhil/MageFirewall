@@ -1,0 +1,9 @@
+<?php 
+//exec('find . -iregex ".*\(html\|php\)" -mtime -10',$lists);
+exec('find . -iregex ".*\(html\|php\)" -mtime -10',$lists);
+echo "<b>Last 10 days modified files</b> <br> <br> <div style='height: 250px;overflow-y: scroll; border: 1px solid;padding: 5px;'>";
+foreach($lists as $list){
+	echo $list.'<br>';
+}
+echo "</div>";
+?>

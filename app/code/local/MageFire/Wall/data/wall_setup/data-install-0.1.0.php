@@ -900,3 +900,52 @@ foreach ($tickets as $ticket) {
         ->setData($ticket)
         ->save();
 }
+
+$optionsModel = Mage::getModel('wall/options')->getCollection();
+$options = Array
+(
+    '0' => Array
+        ( 
+            //    'id''1', 
+            'text' => 'Show recent modified file days ', 
+            'path' => 'show_recent_file_days', 
+            'value' => '5'
+        ), 
+
+    '1' => Array
+        ( 
+            //    'id''2', 
+            'text' => 'Show recent modified file days ', 
+            'path' => 'firewall_enable', 
+            'value' => '1'
+        ), 
+
+    '2' => Array
+        ( 
+            //    'id''3', 
+            'text' => 'Prepend configuration', 
+            'path' => 'prepend_configuration', 
+            'value' => ''
+        ), 
+
+    '3' => Array
+        ( 
+            //    'id''50', 
+           'text' => 'Debug mode', 
+            'path' => 'debug_mode', 
+            'value' => '1'
+        ), 
+
+    '4' => Array
+        ( 
+            //    'id''51', 
+            'text' => 'Reciver Email address', 
+            'path' => 'email_addresss', 
+            'value' => ''
+        )
+    );
+foreach ($options as $option) {
+    Mage::getModel('wall/options')
+        ->setData($option)
+        ->save();
+}

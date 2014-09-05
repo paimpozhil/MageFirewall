@@ -12,18 +12,20 @@ class MageFire_Wall_Adminhtml_Dashboard_ViewController extends Mage_Adminhtml_Co
 	public function indexAction() {
 		if ($data = $this->getRequest()->getPost()) {
 			try {
-				$inchooSwitch = new Mage_Core_Model_Config();
-				$inchooSwitch ->saveConfig('mageFireWall/enable', $data['FireWallconfigValue'], 'default', 0);
-				if($data['FireWallconfigValue']==1){
-					$message = $this->__('Your site is protected now. Please click disabled button to disabled.');
-					Mage::getSingleton('adminhtml/session')->addSuccess($message);
+				$optionsAll = Mage::getModel('wall/options');
+				foreach($data['fireWall_options'] as $datas){
+					if(isset($datas['value']))
+					$optionsAll->setData($datas);
+					$optionsAll->save();
 				}
+				
+								
+				Mage::getSingleton('adminhtml/session')->addSuccess('Configuration saved succesfully.');
 			} catch (Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			}
 			$this->_redirect('*/*');
 		}
-		//$this->_addContent($this->getLayout()->createBlock('paymentcapture/adminhtml_paymentcapture'));
 		$block = $this->getLayout()->createBlock('core/template');
         $block->setTemplate('firewall/dashboard.phtml');
 
