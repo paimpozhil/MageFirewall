@@ -906,18 +906,18 @@ $options = Array
 (
     '0' => Array
         ( 
-            //    'id''1', 
-            'text' => 'Show recent modified file days ', 
-            'path' => 'show_recent_file_days', 
-            'value' => '5'
+            //    'id''1',  
+            'text' => 'Firewall ', 
+            'path' => 'firewall_enable', 
+            'value' => '1'
         ), 
 
     '1' => Array
         ( 
             //    'id''2', 
-            'text' => 'Show recent modified file days ', 
-            'path' => 'firewall_enable', 
-            'value' => '1'
+           'text' => 'Debug mode', 
+            'path' => 'debug_mode', 
+            'value' => '1' 
         ), 
 
     '2' => Array
@@ -930,10 +930,10 @@ $options = Array
 
     '3' => Array
         ( 
-            //    'id''50', 
-           'text' => 'Debug mode', 
-            'path' => 'debug_mode', 
-            'value' => '1'
+            //    'id''50',           
+            'text' => 'Show recent modified file days ', 
+            'path' => 'show_recent_file_days', 
+            'value' => '5'
         ), 
 
     '4' => Array
