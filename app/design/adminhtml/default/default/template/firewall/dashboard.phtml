@@ -1,68 +1,99 @@
-<?php 
-
-function phpinfo_array()
+<style>
+.firewall-options-form-table tr > td
 {
-    ob_start();
-    phpinfo();
-    $info_arr = array();
-    $info_lines = explode("\n", strip_tags(ob_get_clean(), "<tr><td><h2>"));
-    $cat = "General";
-    foreach($info_lines as $line)
-    {
-        // new cat?
-        preg_match("~<h2>(.*)</h2>~", $line, $title) ? $cat = $title[1] : null;
-        if($cat=='Core') 
-        if(preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val))
-        {
-            $info_arr[$cat][$val[1]] = $val[2];
-        }
-        elseif(preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val))
-        {
-            $info_arr[$cat][$val[1]] = array("local" => $val[2], "master" => $val[3]);
-        }
-    }
-    return $info_arr;
+	border-collapse:separate; 
+border-spacing:5em;
+  padding-bottom: 1em;
 }
-
-
-$news=phpinfo_array();
-$news['Core']['auto_prepend_file']['local'];
-$firewalFile = $news['Core']['auto_prepend_file']['master'];
-$autoprepend = '<b><img src="/skin/adminhtml/default/default/images/error_msg_icon.gif" >   No</b>.';
+</style>
+<?php $optionsAll = Mage::getModel('wall/options')->getCollection()->getData();
+echo "<pre>";
+print_r($optionsAll); die;
+$firewalFile = ini_get('auto_prepend_file');
+$rootPath = $_SERVER['DOCUMENT_ROOT'];
+//$autoprependMsg ='Please add these path in your php configuration : '.$rootPath.'/lib/firewall/firewall.php';
+$autoprepend = '<b>No</b>.'; 
+ $autoprependimageIcon =   'error_msg_icon.gif';
 if (strpos($firewalFile,'lib/firewall/firewall.php') !== false) {
-    $autoprepend = '<b><img src="/skin/adminhtml/default/default/images/success_msg_icon.gif" >   Yes</b>.';    
+	$autoprependimageIcon =  'success_msg_icon.gif'; 
+	$autoprependMsg ='';
+    $autoprepend = '<b>Yes</b>.';    
 }
-	$FireWallconfigValue = Mage::getStoreConfig('mageFireWall/enable');	
-	$message = '';
-	if(empty($FireWallconfigValue)){
-		$FireWallconfigValue = 1;
-		$fireWallOn = 'Firewall off';
-		$enalbe = 'Enabled';
-		$fireWallEnableMsg = '<b><img src="/skin/adminhtml/default/default/images/error_msg_icon.gif" >   Disabled</b>.';
-	} else if($FireWallconfigValue==1) {
-		$enalbe = 'Disabled';
-		$FireWallconfigValue = 0;
-		$fireWallOn = 'Firewall on';
-		$fireWallEnableMsg = '<b><img src="/skin/adminhtml/default/default/images/success_msg_icon.gif" >   Enabled</b>.';
-	} else {
-		$enalbe = 'Enabled';
-		$message = '<p class="notification-global">Your site is not protected now. Please click enabled button to active.</p>';
-		$fireWallEnableMsg = '<b><img src="/skin/adminhtml/default/default/images/error_msg_icon.gif" >   Disabled</b>.';
-		$FireWallconfigValue = 1;
-		$fireWallOn = 'Firewall off';
-	}
+$senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 ?>
-<?php echo 'Firewall : '.$fireWallEnableMsg; ?>
-<?php echo $this->__($message) ?>
-	<form id="edit_form" name="edit_form" method="post" action="<?php $this->getUrl('*/*/post')?>">
-        <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
-        <h4 ><?php $this->__('This fieldset name')?></h4>
-        <input type="hidden" name="FireWallconfigValue" value="<?php echo $FireWallconfigValue; ?>" />
-        Click here to <?php echo $enalbe; ?> Firewall : <button style="" onclick="firewallConfigForm.submit()" class="form-button" type="button" title="Save Config" id=""><span><span><span><?php echo $this->__($fireWallOn) ?></span></span></span></button>
+<form id="edit_form" name="edit_form" method="post" action="<?php $this->getUrl('*/*/post')?>">
+<input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+<table class="firewall-options-form-table">
+	<tbody>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[0]['text']; ?></th>
+			<td width="20" align="left">
+			<td align="left">	
+				<input type="hidden" name="fireWall_options[1][option_id]" value="<?php echo $optionsAll[0]['option_id']; ?>">			
+				<input type="text" name="fireWall_options[1][value]" value="<?php echo $optionsAll[0]['value']; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[1]['text']; ?></th>
+			<td width="20" align="left">
+				<?php $imageIcon = ($optionsAll[1]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
+				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
+			</td>
+			<td align="left">
+				<input type="hidden" name="fireWall_options[2][option_id]" value="<?php echo $optionsAll[1]['option_id']; ?>">
+				<select style="width:200px" name="fireWall_options[2][value]">
+					<option <?php echo ($optionsAll[1]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
+					<option <?php echo ($optionsAll[1]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[2]['text']; ?></th>
+			<td width="20" align="left">
+				<?php 
+				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$autoprependimageIcon.'">'; ?>
+			</td>
+			<td align="left">
+				<input type="hidden" name="fireWall_options[3][option_id]" value="<?php echo $optionsAll[2]['option_id']; ?>">
+				<select style="width:200px" name="fireWall_options[3][value]" disabled>
+					<option  value="1"> <?php echo $autoprepend; ?></option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[3]['text']; ?></th>
+			<td width="20" align="left">
+				<?php $imageIcon = ($optionsAll[3]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
+				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
+			</td>
+			<td align="left">
+				<input type="hidden" name="fireWall_options[4][option_id]" value="<?php echo $optionsAll[3]['option_id']; ?>">
+				<select style="width:200px" name="fireWall_options[4][value]">
+					<option <?php echo ($optionsAll[3]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
+					<option <?php echo ($optionsAll[3]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[4]['text']; ?></th>
+			<td></td>
+			<td align="left">
+				<input type="hidden" name="fireWall_options[4][option_id]" value="<?php echo $optionsAll[4]['option_id']; ?>">
+				<input type="text" name="fireWall_options[4][value]" value="<?php echo (empty($optionsAll[4]['value'])) ? $senderEmail : $optionsAll[4]['value']; ?>" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+<?php //echo $this->__($message) ?>
+<br>
+<br>
+<button style="" onclick="firewallConfigForm.submit()" class="form-button" type="button" title="Save Config" id=""><span><span><span><?php echo $this->__('Save Configuration') ?></span></span></span></button>
     </form>
     <br>
     <br>
-<?php echo $this->__('MageFirewall configuration : '.$autoprepend) ?>
+<?php //echo $this->__('MageFirewall configuration : '.$autoprepend) ?>
+<br>
+<?php //echo $autoprependMsg; ?>
 <script type="text/javascript">
     var firewallConfigForm = new varienForm('edit_form');
 </script>
