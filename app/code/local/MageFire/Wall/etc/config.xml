@@ -35,7 +35,7 @@
                         <sort_order>50</sort_order>
                     </dashboard>                    
 					<recentedittedfiles>
-                        <title>recentedittedfiles</title>
+                        <title>Recent Edited Files</title>
                         <action>wall/adminhtml_dashboard_recent</action>
                         <sort_order>60</sort_order>
                     </recentedittedfiles>

@@ -31,11 +31,9 @@
     $clientIp = $_SERVER['REMOTE_ADDR'];
     $blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
     $blackListResults = $readConnection->fetchAll($blackListQuery);
-	if(!Mage::helper('core')->isModuleEnabled('MageFire_Wall')) return;
-	if(Mage::getStoreConfig('mageFireWall/enable')!=1) return;
+	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',1)->addFieldToFilter('value',1)->getData()) return;
+	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',2)->addFieldToFilter('value',1)->getData()) return;
 define('NF_STARTTIME', microtime(true));
-
-
 //@$dbh = new mysqli($db_ip, $db_user, $db_pass, $db_name, $db_port);
 
 $db_ip = $db_port = $db_user = $db_pass = '';
@@ -80,7 +78,6 @@ if ( ($_SERVER['SCRIPT_FILENAME'] == dirname(__FILE__) .'/index.php') || ($_SERV
 if (preg_match('/^[\d.:]+$/', $_SERVER['HTTP_HOST'])) {
    if ($MagenfCheckDebug) { $nfdebug.= STAG ."HTTP_HOST\t\t\t[FAIL]   HTTP_HOST is an IP (".$_SERVER['HTTP_HOST']  .')'. ETAG; }
    nf_write2log('HTTP_HOST is an IP', $_SERVER['HTTP_HOST'], 1, 0);
-   nf_block();
 }
 
 if ( strpos('GET|POST|HEAD', $_SERVER['REQUEST_METHOD']) === false ) {

@@ -7,8 +7,6 @@ border-spacing:5em;
 }
 </style>
 <?php $optionsAll = Mage::getModel('wall/options')->getCollection()->getData();
-echo "<pre>";
-print_r($optionsAll); die;
 $firewalFile = ini_get('auto_prepend_file');
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
 //$autoprependMsg ='Please add these path in your php configuration : '.$rootPath.'/lib/firewall/firewall.php';
@@ -28,9 +26,15 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 		<tr>
 			<th scope="row"><?php echo $optionsAll[0]['text']; ?></th>
 			<td width="20" align="left">
-			<td align="left">	
-				<input type="hidden" name="fireWall_options[1][option_id]" value="<?php echo $optionsAll[0]['option_id']; ?>">			
-				<input type="text" name="fireWall_options[1][value]" value="<?php echo $optionsAll[0]['value']; ?>" />
+				<?php $imageIcon = ($optionsAll[0]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
+				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
+			</td>
+			<td align="left">				
+				<input type="hidden" name="fireWall_options[1][option_id]" value="<?php echo $optionsAll[0]['option_id']; ?>">
+				<select style="width:200px" name="fireWall_options[1][value]">
+					<option <?php echo ($optionsAll[0]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
+					<option <?php echo ($optionsAll[0]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
+				</select>
 			</td>
 		</tr>
 		<tr>
@@ -62,24 +66,19 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 		</tr>
 		<tr>
 			<th scope="row"><?php echo $optionsAll[3]['text']; ?></th>
-			<td width="20" align="left">
-				<?php $imageIcon = ($optionsAll[3]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
-				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
+			<td width="20" align="left">				
 			</td>
-			<td align="left">
-				<input type="hidden" name="fireWall_options[4][option_id]" value="<?php echo $optionsAll[3]['option_id']; ?>">
-				<select style="width:200px" name="fireWall_options[4][value]">
-					<option <?php echo ($optionsAll[3]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
-					<option <?php echo ($optionsAll[3]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
-				</select>
+			<td align="left">					
+				<input type="hidden" name="fireWall_options[4][option_id]" value="<?php echo $optionsAll[3]['option_id']; ?>">			
+				<input type="text" name="fireWall_options[4][value]" value="<?php echo $optionsAll[3]['value']; ?>" />
 			</td>
 		</tr>
 		<tr>
 			<th scope="row"><?php echo $optionsAll[4]['text']; ?></th>
 			<td></td>
 			<td align="left">
-				<input type="hidden" name="fireWall_options[4][option_id]" value="<?php echo $optionsAll[4]['option_id']; ?>">
-				<input type="text" name="fireWall_options[4][value]" value="<?php echo (empty($optionsAll[4]['value'])) ? $senderEmail : $optionsAll[4]['value']; ?>" />
+				<input type="hidden" name="fireWall_options[5][option_id]" value="<?php echo $optionsAll[4]['option_id']; ?>">
+				<input type="text" name="fireWall_options[5][value]" value="<?php echo (empty($optionsAll[4]['value'])) ? $senderEmail : $optionsAll[4]['value']; ?>" />
 			</td>
 		</tr>
 	</tbody>
