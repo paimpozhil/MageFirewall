@@ -33,20 +33,11 @@
     $WhiteListResults = $readConnection->fetchAll($WhiteListQuery); 
 	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',1)->addFieldToFilter('value',1)->getData()) return;
 	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',2)->addFieldToFilter('value',1)->getData()) return;
-define('NF_STARTTIME', microtime(true));
-//@$dbh = new mysqli($db_ip, $db_user, $db_pass, $db_name, $db_port);
-
-$db_ip = $db_port = $db_user = $db_pass = '';
+	define('NF_STARTTIME', microtime(true));
 //get debug mode is enable
-	/*$query = 'SELECT * FROM ' . $resource->getTableName('ncjgb_nf_options');
-    $results = $readConnection->fetchAll($query);    */
 	$MagenfCheckDebug = 2; // $results['0']['debug'];
 	$MagenfCheckEnabled = 1; // $results['0']['enabled'];
 	$MagenfoptionApplication = 'generic|option|magento'; //$results['0']['application'];
-/*$dbq = $dbh->query('SELECT * FROM `'. $db_prefix .'nf_options`');
-if (! $dboptions  = $dbq->fetch_object() ) {
-	die('error (line ' . __LINE__ . ') : fetch_object error');
-}*/
 
 if ($MagenfCheckDebug) {
    register_shutdown_function('nf_debugfirewall', $MagenfCheckDebug);
@@ -63,8 +54,9 @@ if (! $MagenfCheckEnabled) {
 		$blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
 		$blackListResults = $readConnection->fetchAll($blackListQuery);
 		if(!empty($blackListResults)){
+			nf_write2log('Blacklist Ip trying to get site.', null, 2, 0);
 			echo "You are in blacklist.";
-			die();	
+			//die();	
 		}
 	}
 

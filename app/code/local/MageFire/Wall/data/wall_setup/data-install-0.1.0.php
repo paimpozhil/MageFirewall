@@ -915,7 +915,7 @@ $options = Array
     '1' => Array
         ( 
             //    'id''2', 
-           'text' => 'Debug mode', 
+           'text' => 'Console mode', 
             'path' => 'debug_mode', 
             'value' => '1' 
         ), 

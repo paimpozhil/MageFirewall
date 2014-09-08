@@ -1,11 +1,6 @@
 <?php 
-//exec('find . -iregex ".*\(html\|php\)" -mtime -10',$lists);
-$days = Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',4)->getData();
-$noofdays = $days[0]['value'];
-exec('find . -iregex ".*\(html\|php\)" -mtime -'.$noofdays,$lists);
-echo "<b>Last ".$noofdays." days modified files</b> <br> <br> <div style='height: 250px;overflow-y: scroll; border: 1px solid;padding: 5px;'>";
-foreach($lists as $list){
-	echo $list.'<br>';
-}
+$lists = Mage::helper('wall')->getRecentEditedFiles();
+echo "<b>Last ".$lists[0]." days modified files</b> <br> <br> <div style='height: 250px;overflow-y: scroll; border: 1px solid;padding: 5px;'>";
+	echo $lists[1];
 echo "</div>";
 ?>

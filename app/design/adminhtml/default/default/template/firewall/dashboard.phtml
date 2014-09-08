@@ -2,18 +2,18 @@
 .firewall-options-form-table tr > td
 {
 	border-collapse:separate; 
-border-spacing:5em;
-  padding-bottom: 1em;
+	border-spacing:5em;
+	padding-bottom: 1em;
 }
 .critical { color: #D20000; }
 </style>
 <?php 
+$wallHelper = Mage::helper('wall');
 $getIncludedFile = get_included_files(); 
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
 $paths = $rootPath.'/lib/firewall/firewall.php';
 $optionsAll = Mage::getModel('wall/options')->getCollection()->getData();
 $firewalFile = ini_get('auto_prepend_file');
-$autoprependMsg ='<p class="critical">To enable firewall include following path in index.php. <br>/lib/firewall/firewall.php</p>';
 $autoprepend = '<b>No</b>.'; 
 $autoprependimageIcon =   'error_msg_icon.gif';
 $firewallDisabled = 0;
@@ -22,8 +22,16 @@ if (strpos($firewalFile,'lib/firewall/firewall.php') !== false || in_array($path
 	$autoprependimageIcon =  'success_msg_icon.gif'; 
 	$autoprependMsg ='';
     $autoprepend = '<b>Yes</b>.';    
+} else {
+	$autoprependMsg .='<p class="critical">To Enable firewall include the following line in index.php in your webroot directory <br />
+					after the following line of code <br /> 
+					"define(\'MAGENTO_ROOT\', getcwd());"  <br /> 
+					require_once MAGENTO_ROOT.\'/lib/firewall/firewall.php\';</p>';
+	$autoprependMsg .='<p class="critical">add the below line to your php.ini / fastphp / in your vhost configuration file. <br /> 	
+					auto_prepend_file '.$paths.'"</p>';
+	
 }
-$senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
+$senderEmail = $wallHelper->getMageEmail();
 ?>
 <form id="edit_form" name="edit_form" method="post" action="<?php $this->getUrl('*/*/post')?>">
 <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
@@ -92,7 +100,7 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 			<th scope="row">Hacking Attempts</th>
 			<td></td>
 			<td align="left">
-				<?php echo $_blockData = Mage::helper('wall')->getLogsCount(); ?>
+				<?php echo $_blockData = $wallHelper->getLogsCount(); ?>
 			</td>
 		</tr>
 	</tbody>
