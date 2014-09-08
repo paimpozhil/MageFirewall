@@ -32,10 +32,10 @@ CREATE TABLE {$this->getTable('firewall_version')} (
 -- DROP TABLE IF EXISTS {$this->getTable('firewall_logs')};
 CREATE TABLE {$this->getTable('firewall_logs')} (
   `log_id` int(11) unsigned NOT NULL auto_increment,
-  `ruleid` varchar(255) NOT NULL default '',
-  `summary` text NOT NULL default '',
-  `ip` smallint(6) NOT NULL default '0',
-  `level` smallint(6) NOT NULL,
+  `ruleid` varchar(255) NULL default '',
+  `summary` text NULL default '',
+  `ip` svarchar(255) NULL,
+  `level` smallint(6) NULL,
   `created_time` datetime NULL,
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
