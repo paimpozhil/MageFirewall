@@ -29,8 +29,8 @@
     $resource = Mage::getSingleton('core/resource');
     $readConnection = $resource->getConnection('core_read');
     $clientIp = $_SERVER['REMOTE_ADDR'];
-    $blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
-    $blackListResults = $readConnection->fetchAll($blackListQuery);
+    $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
+    $WhiteListResults = $readConnection->fetchAll($WhiteListQuery); 
 	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',1)->addFieldToFilter('value',1)->getData()) return;
 	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',2)->addFieldToFilter('value',1)->getData()) return;
 define('NF_STARTTIME', microtime(true));
@@ -59,10 +59,15 @@ if (! $MagenfCheckEnabled) {
    if ($MagenfCheckDebug) { define('NFDEBUG', $nfdebug.= STAG ."protection is disabled\t[STOP]". ETAG . '::' . nf_benchmarks() ); }
   //return;
 }
-if(!empty($blackListResults)){
-	//echo "You are in blacklist.";
-	//die();	
+	if(empty($WhiteListResults)){
+		$blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
+		$blackListResults = $readConnection->fetchAll($blackListQuery);
+		if(!empty($blackListResults)){
+			echo "You are in blacklist.";
+			die();	
+		}
 	}
+
 if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking user IP\t\t";}
 if ( (preg_match('/^(?:::ffff:)?127\.0\.0\.1$/', $_SERVER['REMOTE_ADDR'])) || ($_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR']) ) {
    if ($MagenfCheckDebug) { define('NFDEBUG', $nfdebug.= '[STOP]   '. $_SERVER['REMOTE_ADDR'] .' is whitelisted'. ETAG . '::' . nf_benchmarks() ); }
@@ -151,6 +156,7 @@ function nf_check_request() {
                if ( is_array($reqvalue) ) {
                   $res = nf_flatten( "\n", $reqvalue );
                   $reqvalue = $res;
+                 
                   $rulesData['what'] = '(?m:'. $rulesData['what'] .')';
                } else {
 						if ( ($where == 'POST') && ($reqvalue) && (! isset( $b64_post[$reqkey])) ) {
@@ -158,13 +164,20 @@ function nf_check_request() {
 							nf_check_b64($reqkey, $reqvalue);
 						}
 					}
+					// print_r("reqvalue." .$reqvalue ."=" );
                if (! $reqvalue) {continue;}
                $rules_count++;
+               
+              // print_r($rulesData['what'] . "<br />");
                if ( preg_match('`'.$rulesData['what'].'`', $reqvalue) ) {
-                  if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   '. $where .' : ' . $rulesData['why'] . ' (#'. $rulesData['id'] . ')' . ETAG; }
-                  nf_write2log($rulesData['why'], $where . ':' . $reqkey . ' = ' . $reqvalue, $rulesData['level'], $rulesData['id']);
+				   
+                  if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   '. $where .' : ' . $rulesData['why'] . ' (#'. $rulesData['rules_id'] . ')' . ETAG; }
+                 
+                  nf_write2log($rulesData['why'], $where . ':' . $reqkey . ' = ' . $reqvalue, $rulesData['level'], $rulesData['rules_id']);
                   nf_block();
                }
+               
+			   
             }
 				continue;
 			}
@@ -179,7 +192,7 @@ function nf_check_request() {
             }
             if (! $GLOBALS['_' . $sub_value[0]] [$sub_value[1]]) {continue;}
 				if ( preg_match('`'. $rulesData['what'] .'`', $GLOBALS['_' . $sub_value[0]] [$sub_value[1]]) ) {
-					if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   '.$sub_value[0].':'.$sub_value[1].' : ' . $rulesData['why'] . ' (#'. $rulesData['id'] . ')' . ETAG; }
+					if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking request\t\t". '[FAIL]   '.$sub_value[0].':'.$sub_value[1].' : ' . $rulesData['why'] . ' (#'. $rulesData['rules_id'] . ')' . ETAG; }
 					nf_write2log($rulesData['why'], $sub_value[0].':'.$sub_value[1].' = ' . $GLOBALS['_' . $sub_value[0]] [$sub_value[1]], $rulesData['level'], $rulesData['rules_id']);
 					nf_block();
 				}
@@ -344,13 +357,13 @@ function nf_write2log( $loginfo, $logdata, $loglevel, $ruleid ) {
 
    //if (strlen($logdata) > 100) { $logdata = substr($logdata, 0, 100) . '...'; }
 
-    $message =   '[' . time() . '] [' . nf_benchmarks() . '] ' .
-      '[' . $_SERVER['SERVER_NAME'] . '] ' . '[#' . $rand_value . '-' . $ruleid . '] ' .
-      '[' . $loglevel . '] ' . '[' . $_SERVER['REMOTE_ADDR'] . '] ' .
+    $message =  
       '[' . $http_ret_code . '] ' . '[' . $_SERVER['REQUEST_METHOD'] . '] ' .
       '[' . $_SERVER['SCRIPT_NAME'] . '] ' . '[' . $loginfo . '] ' .
       '[' . nf_bin2hex_string($logdata) . ']' . "\n";
-   
+   Mage::getModel('wall/logs')
+        ->setData(array('summary'=>$message,'ruleid'=>$ruleid,'level'=>$loglevel,'ip'=>$_SERVER['REMOTE_ADDR'],'created_time'=>time()))
+        ->save();
    Mage::log($message, null, "firewall_-".date('Y-m-d').".log");
   // fclose($handle);
 }

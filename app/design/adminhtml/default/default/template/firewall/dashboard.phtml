@@ -88,6 +88,13 @@ $senderEmail = Mage::getStoreConfig('trans_email/ident_general/email');
 				<input type="text" name="fireWall_options[5][value]" value="<?php echo (empty($optionsAll[4]['value'])) ? $senderEmail : $optionsAll[4]['value']; ?>" />
 			</td>
 		</tr>
+		<tr>
+			<th scope="row">Hacking Attempts</th>
+			<td></td>
+			<td align="left">
+				<?php echo $_blockData = Mage::helper('wall')->getLogsCount(); ?>
+			</td>
+		</tr>
 	</tbody>
 </table>
 <?php //echo $this->__($message) ?>
