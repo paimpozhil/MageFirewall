@@ -34,7 +34,7 @@ CREATE TABLE {$this->getTable('firewall_logs')} (
   `log_id` int(11) unsigned NOT NULL auto_increment,
   `ruleid` varchar(255) NULL default '',
   `summary` text NULL default '',
-  `ip` svarchar(255) NULL,
+  `ip` varchar(255) NULL,
   `level` smallint(6) NULL,
   `created_time` datetime NULL,
   PRIMARY KEY (`log_id`)
