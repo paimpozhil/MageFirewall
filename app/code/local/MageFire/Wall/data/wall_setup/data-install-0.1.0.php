@@ -937,7 +937,7 @@ $options = Array
             'text' => 'Receiver Email address', 
             'path' => 'email_addresss', 
             'value' => ''
-        )
+        ),
     '5' => Array
         ( 
             'text' => 'Allows only Whitelist ip\'s to access admin', 
