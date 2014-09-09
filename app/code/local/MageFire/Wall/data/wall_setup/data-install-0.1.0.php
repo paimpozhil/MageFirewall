@@ -906,7 +906,6 @@ $options = Array
 (
     '0' => Array
         ( 
-            //    'id''1',  
             'text' => 'Firewall ', 
             'path' => 'firewall_enable', 
             'value' => '1'
@@ -914,34 +913,36 @@ $options = Array
 
     '1' => Array
         ( 
-            //    'id''2', 
            'text' => 'Console mode', 
             'path' => 'debug_mode', 
-            'value' => '1' 
+            'value' => '0' 
         ), 
 
     '2' => Array
-        ( 
-            //    'id''3', 
+        (  
             'text' => 'Prepend configuration', 
             'path' => 'prepend_configuration', 
             'value' => ''
         ), 
 
     '3' => Array
-        ( 
-            //    'id''50',           
+        (          
             'text' => 'Show recent modified file days ', 
             'path' => 'show_recent_file_days', 
             'value' => '5'
         ), 
 
     '4' => Array
-        ( 
-            //    'id''51', 
-            'text' => 'Reciver Email address', 
+        (  
+            'text' => 'Receiver Email address', 
             'path' => 'email_addresss', 
             'value' => ''
+        )
+    '5' => Array
+        ( 
+            'text' => 'Allows only Whitelist ip\'s to access admin', 
+            'path' => 'allow_whitelist', 
+            'value' => '0'
         )
     );
 foreach ($options as $option) {

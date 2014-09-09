@@ -28,8 +28,9 @@
 	Mage::app();	
     $resource = Mage::getSingleton('core/resource');
     $readConnection = $resource->getConnection('core_read');
-    $clientIp = $_SERVER['REMOTE_ADDR'];
-    $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
+    $wallHelper = Mage::helper('wall');
+    $ip_address = $wallHelper->getClientIp();
+    $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$ip_address'";
     $WhiteListResults = $readConnection->fetchAll($WhiteListQuery); 
 	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',1)->addFieldToFilter('value',1)->getData()) return;
 	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',2)->addFieldToFilter('value',1)->getData()) return;
@@ -51,7 +52,7 @@ if (! $MagenfCheckEnabled) {
   //return;
 }
 	if(empty($WhiteListResults)){
-		$blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$clientIp'";
+		$blackListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_blacklist')."  WHERE status=1 && is_delete!=1 && ip='$ip_address'";
 		$blackListResults = $readConnection->fetchAll($blackListQuery);
 		if(!empty($blackListResults)){
 			nf_write2log('Blacklist Ip trying to get site.', null, 2, 0);

@@ -59,6 +59,7 @@ CREATE TABLE {$this->getTable('firewall_blacklist')} (
   `ip` varchar(255) NOT NULL default '',
   `priority` varchar(255) NOT NULL default '',
   `count` varchar(255) NOT NULL default '',
+  `admin_login` smallint(6) NOT NULL default '0',
   `is_delete` smallint(6) NOT NULL default '0',
   `status` smallint(6) NOT NULL default '0',
   `created_time` datetime NULL,
