@@ -22,5 +22,15 @@ class MageFire_Wall_Helper_Data extends Mage_Core_Helper_Abstract
 		return $lists;		
 	}
 	
+	public function getClientIp(){
+		if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] != '') {
+			$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+		}
+		return $ip_address;		
+	}
+	
+	
 }
 ?>

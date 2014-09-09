@@ -26,9 +26,9 @@ if (strpos($firewalFile,'lib/firewall/firewall.php') !== false || in_array($path
 	$autoprependMsg .='<p class="critical">To Enable firewall include the following line in index.php in your webroot directory <br />
 					after the following line of code <br /> 
 					"define(\'MAGENTO_ROOT\', getcwd());"  <br /> 
-					require_once MAGENTO_ROOT.\'/lib/firewall/firewall.php\';</p>';
+					require_once MAGENTO_ROOT.\'/lib/firewall/firewall.php\';</p> or';
 	$autoprependMsg .='<p class="critical">add the below line to your php.ini / fastphp / in your vhost configuration file. <br /> 	
-					auto_prepend_file '.$paths.'"</p>';
+					auto_prepend_file '.$paths.'</p>';
 	
 }
 $senderEmail = $wallHelper->getMageEmail();
@@ -100,7 +100,20 @@ $senderEmail = $wallHelper->getMageEmail();
 			<th scope="row">Hacking Attempts</th>
 			<td></td>
 			<td align="left">
-				<?php echo $_blockData = $wallHelper->getLogsCount(); ?>
+				<a href="<?php echo  Mage::helper("adminhtml")->getUrl("wall/adminhtml_logs/index"); ?>">
+					<?php echo $_blockData = $wallHelper->getLogsCount(); ?>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[5]['text']; ?></th>
+			<td></td>
+			<td align="left">
+				<input type="hidden" name="fireWall_options[6][option_id]" value="<?php echo $optionsAll[5]['option_id']; ?>">
+				<select style="width:200px" name="fireWall_options[6][value]">
+					<option <?php echo ($optionsAll[5]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
+					<option <?php echo ($optionsAll[5]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
+				</select>
 			</td>
 		</tr>
 	</tbody>

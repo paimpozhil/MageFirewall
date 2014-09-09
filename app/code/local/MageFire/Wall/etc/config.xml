@@ -115,6 +115,16 @@
                 </entities>
             </wall_mysql4>
         </models>
+		<events>
+			<admin_session_user_login_failed>
+				<observers>
+					<MageFire_Wall_Model_Observer>
+						<class>MageFire_Wall_Model_Observer</class>
+						<method>login_validation</method>
+					</MageFire_Wall_Model_Observer>
+				</observers>
+			</admin_session_user_login_failed>
+		</events>
         <resources>
             <wall_setup>
                 <setup>
