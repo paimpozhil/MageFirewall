@@ -32,11 +32,17 @@ class MageFire_Wall_Block_Adminhtml_Blacklist_Grid extends Mage_Adminhtml_Block_
 			'align'     => 'left',
 			'index'     => 'ip',
         ));
-        /*$this->addColumn('priority', array(
-			'header'    => Mage::helper('wall')->__('Level'),
+        $this->addColumn('text', array(
+			'header'    => Mage::helper('wall')->__('Reason'),
 			'align'     => 'left',
-			'index'     => 'priority',
-        ));*/
+			'index'     => 'text',
+        ));
+        $this->addColumn('admin_login', array(
+			'header'    => Mage::helper('wall')->__('Admin Login'),
+			'align'     => 'left',
+			'index'     => 'admin_login',
+			'renderer' 	=> new MageFire_Wall_Block_Adminhtml_Blacklist_Renderer_IsAdmin(),
+        ));
 		return parent::_prepareColumns();
 	}
 	

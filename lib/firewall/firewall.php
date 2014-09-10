@@ -19,7 +19,6 @@
  | GNU General Public License for more details.                     |
  +------------------------------------------------------------------+
 */
-
 	$mageFilename = 'app/Mage.php';
 	require_once $mageFilename;
 	Mage::setIsDeveloperMode(true);
@@ -27,16 +26,20 @@
 	umask(0);
 	Mage::app();	
     $resource = Mage::getSingleton('core/resource');
-    $readConnection = $resource->getConnection('core_read');
+    $readConnection = $resource->getConnection('core_read'); 
+    $mageOptions = Mage::getModel('wall/options');
     $wallHelper = Mage::helper('wall');
+	if($wallHelper->getOptionsData('debug_mode')==0) return;
     $ip_address = $wallHelper->getClientIp();
     $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$ip_address'";
-    $WhiteListResults = $readConnection->fetchAll($WhiteListQuery); 
-	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',1)->addFieldToFilter('value',1)->getData()) return;
-	if(!Mage::getModel('wall/options')->getCollection()->addFieldToFilter('option_id',2)->addFieldToFilter('value',1)->getData()) return;
+    $WhiteListResults = $readConnection->fetchAll($WhiteListQuery);
+	$MagenfCheckDebug = '';
+	//checking debug mode is enabled or not
+	if($wallHelper->getOptionsData('firewall_enable')==1) $MagenfCheckDebug = 2;
+	$getIpOptionValue = $wallHelper->getOptionsData('banning_ip');
+	$CheckipOption = ($getIpOptionValue==0) ? 'off' : 'on';
 	define('NF_STARTTIME', microtime(true));
-//get debug mode is enable
-	$MagenfCheckDebug = 2; // $results['0']['debug'];
+
 	$MagenfCheckEnabled = 1; // $results['0']['enabled'];
 	$MagenfoptionApplication = 'generic|option|magento'; //$results['0']['application'];
 
@@ -60,22 +63,23 @@ if (! $MagenfCheckEnabled) {
 			//die();	
 		}
 	}
-
 if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking user IP\t\t";}
 if ( (preg_match('/^(?:::ffff:)?127\.0\.0\.1$/', $_SERVER['REMOTE_ADDR'])) || ($_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR']) ) {
    if ($MagenfCheckDebug) { define('NFDEBUG', $nfdebug.= '[STOP]   '. $_SERVER['REMOTE_ADDR'] .' is whitelisted'. ETAG . '::' . nf_benchmarks() ); }
    return;
 }
 
-if ($MagenfCheckDebug) { $nfdebug.= '[----]   banning IP option is off'. ETAG; }
+if ($MagenfCheckDebug) { $nfdebug.= "[----]   banning IP option is $CheckipOption". ETAG; }
 if ( ($_SERVER['SCRIPT_FILENAME'] == dirname(__FILE__) .'/index.php') || ($_SERVER['SCRIPT_FILENAME'] == dirname(__FILE__) .'/login.php') ) {
    if ($MagenfCheckDebug) { define('NFDEBUG', $nfdebug.= STAG ."script is whitelisted\t\t[STOP]   ".$_SERVER['SCRIPT_NAME']. ETAG . '::' . nf_benchmarks() ); }
    return;
 }
-
 if (preg_match('/^[\d.:]+$/', $_SERVER['HTTP_HOST'])) {
-   if ($MagenfCheckDebug) { $nfdebug.= STAG ."HTTP_HOST\t\t\t[FAIL]   HTTP_HOST is an IP (".$_SERVER['HTTP_HOST']  .')'. ETAG; }
-   nf_write2log('HTTP_HOST is an IP', $_SERVER['HTTP_HOST'], 1, 0);
+	if ($MagenfCheckDebug) { $nfdebug.= STAG ."HTTP_HOST\t\t\t[FAIL]   HTTP_HOST is an IP (".$_SERVER['HTTP_HOST']  .')'. ETAG; }
+	nf_write2log('sHTTP_HOST is an IP', $_SERVER['HTTP_HOST'], 1, 0);
+	if($getIpOptionValue==1){
+		nf_block();
+	}
 }
 
 if ( strpos('GET|POST|HEAD', $_SERVER['REQUEST_METHOD']) === false ) {
@@ -320,7 +324,7 @@ function nf_block() {
 
    header('HTTP/1.1 403 Forbidden');
 	header('Status: 403 Forbidden');
-	echo '<html><head><title>403 Forbidden</title><style>.smallblack{font-family:Verdana,Arial,Helvetica,Ubuntu,"Bitstream Vera Sans",sans-serif;font-size:12px;line-height:16px;color:#000000;}.tinygrey{font-family:Verdana,Arial,Helvetica,Ubuntu, "Bitstream Vera Sans",sans-serif;font-size:10px;line-height:12px;color:#999999;}</style></head><body><br><br><br><br><br><table align=center style="border:1px solid #FDCD25;" cellspacing=0 cellpadding=6 class=smallblack><tr><td align=center><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH1goFFS4tIeiJwwAAAqNJREFUOMttk9trXFUUxn97nz0zZ+ZEEnNFwSAhVQoKEcFCqaJ9CQhBnxRC639QCvqgkJdQGoo3fBbxQmlLzIPoQ0SKEAQlITEEL6mkScUmJ2MymclJzlzOTM6cs3w4U3OhH+yXtdb3fWvtxVKcwPI4g20Z3nW6H30509HvgCLcc2tVr/hT4PPRU1f5i4dhZhzjfpz+Mpx/25fdJZE4kkPEIt7vEi68429+kr3x66ekjpFlCqvwef+8FH6OJPRFQl+q+9vy9eQtuXnjupQK6/IgLsW5aOeLJxeXx0kDGIC8y2ePvzb+HCanKa8BsHLnH+YXFjHG0NUmDL/0bOKm07r7/MRQ+O1bX0E0au59wKmegadHMI6hsgoa0FD11snn81iWxc52BglslAAxoIzuHjg9vPbhn88Yx+G9VC7dTbCW9KMTo9r+Jq7rorVmr2ghQRqlFQgQQiqb7mxvY8zkOjgHGxCuQgSoRCQob+O6LkopdosCByrJCUkd97HbecGYHDZ6D6qzYPf8L1ArF9nY2Eg62G0iYQRKJSM0SqBLGIeMUVkUFnBwF9QWpOxkM3GdZrMJQHhQBGkk5LAOB34yrg1GFA1SgCWg90Htg4InHjtcc19PDaVqrS0AKaAJommYsMFstpNBaCVM8l48C79MgbsFr5wBbbdm161/MhB5LOlmhfdjGx/TEkgBaVhx4c3LcOkK/PF3EjtqIFnKUcA13TXKcrDDD7QRYx2KfHMb3H+hUITJaYj0EQGHuF7gx443WNQATpGLjT2WeIQIKyl6fQT6eqGrE0ZeBcsGrITc8FjOVrhw/B6+J1OfYyr28MRHxEfiKhIHiFQQKSOxh1ef5zuZwX7AUyevsjLNUKqXMauL51WOtIAioB6V+K1ZYsIZZvFo/X+fTjL6xSvBJAAAAABJRU5ErkJggg==" border=0 width=16 height=16><p>Sorry <b>'. $_SERVER['REMOTE_ADDR'] .'</b>, your request cannot be proceeded.<br>For security reason it was blocked and logged.<p>If you think that this was a mistake, please contact<br>the webmaster and enclose the following incident ID&nbsp;:<p>[<b>#' . $rand_value . '</b>]<br>&nbsp;</td></tr></table><br><br><br><br><center class=tinygrey>&copy; 2012-'. date('Y') .' <a style="color:#999999;" href="http://nintechnet.com/" target="_blank" title="The Ninja Technologies Network">NinTechNet</a><br>The Ninja Technologies Network</center></body></html>';
+	echo '<html><head><title>403 Forbidden</title><style>.smallblack{font-family:Verdana,Arial,Helvetica,Ubuntu,"Bitstream Vera Sans",sans-serif;font-size:12px;line-height:16px;color:#000000;}.tinygrey{font-family:Verdana,Arial,Helvetica,Ubuntu, "Bitstream Vera Sans",sans-serif;font-size:10px;line-height:12px;color:#999999;}</style></head><body><br><br><br><br><br><table align=center style="border:1px solid #FDCD25;" cellspacing=0 cellpadding=6 class=smallblack><tr><td align=center><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH1goFFS4tIeiJwwAAAqNJREFUOMttk9trXFUUxn97nz0zZ+ZEEnNFwSAhVQoKEcFCqaJ9CQhBnxRC639QCvqgkJdQGoo3fBbxQmlLzIPoQ0SKEAQlITEEL6mkScUmJ2MymclJzlzOTM6cs3w4U3OhH+yXtdb3fWvtxVKcwPI4g20Z3nW6H30509HvgCLcc2tVr/hT4PPRU1f5i4dhZhzjfpz+Mpx/25fdJZE4kkPEIt7vEi68429+kr3x66ekjpFlCqvwef+8FH6OJPRFQl+q+9vy9eQtuXnjupQK6/IgLsW5aOeLJxeXx0kDGIC8y2ePvzb+HCanKa8BsHLnH+YXFjHG0NUmDL/0bOKm07r7/MRQ+O1bX0E0au59wKmegadHMI6hsgoa0FD11snn81iWxc52BglslAAxoIzuHjg9vPbhn88Yx+G9VC7dTbCW9KMTo9r+Jq7rorVmr2ghQRqlFQgQQiqb7mxvY8zkOjgHGxCuQgSoRCQob+O6LkopdosCByrJCUkd97HbecGYHDZ6D6qzYPf8L1ArF9nY2Eg62G0iYQRKJSM0SqBLGIeMUVkUFnBwF9QWpOxkM3GdZrMJQHhQBGkk5LAOB34yrg1GFA1SgCWg90Htg4InHjtcc19PDaVqrS0AKaAJommYsMFstpNBaCVM8l48C79MgbsFr5wBbbdm161/MhB5LOlmhfdjGx/TEkgBaVhx4c3LcOkK/PF3EjtqIFnKUcA13TXKcrDDD7QRYx2KfHMb3H+hUITJaYj0EQGHuF7gx443WNQATpGLjT2WeIQIKyl6fQT6eqGrE0ZeBcsGrITc8FjOVrhw/B6+J1OfYyr28MRHxEfiKhIHiFQQKSOxh1ef5zuZwX7AUyevsjLNUKqXMauL51WOtIAioB6V+K1ZYsIZZvFo/X+fTjL6xSvBJAAAAABJRU5ErkJggg==" border=0 width=16 height=16><p>Sorry <b>'. $_SERVER['REMOTE_ADDR'] .'</b>, your request cannot be proceeded.<br>For security reason it was blocked and logged.<p>If you think that this was a mistake, please contact<br>the webmaster and enclose the following incident ID&nbsp;:<p>[<b>#' . $rand_value . '</b>]<br>&nbsp;</td></tr></table><br><br><br><br></body></html>';
 
    if ($nfdebug) {define('NFDEBUG', $nfdebug . '::' . nf_benchmarks() );}
 

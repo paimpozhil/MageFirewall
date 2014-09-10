@@ -10,6 +10,7 @@ class MageFire_Wall_Adminhtml_Dashboard_ViewController extends Mage_Adminhtml_Co
         return $this;
 	}
 	public function indexAction() {
+		$wallHelper = Mage::helper('wall');		
 		if ($data = $this->getRequest()->getPost()) {
 			try {
 				$optionsAll = Mage::getModel('wall/options');
@@ -18,7 +19,16 @@ class MageFire_Wall_Adminhtml_Dashboard_ViewController extends Mage_Adminhtml_Co
 					$optionsAll->setData($datas);
 					$optionsAll->save();
 				}
-				
+				if($data['fireWall_options'][6]['value']==1){
+					$ip_address = $wallHelper->getClientIp();
+					$whitelist = Mage::getModel('wall/whitelist');
+					$getWhiteList = Mage::getModel('wall/whitelist')->getCollection()->addFieldToFilter('ip',$ip_address)->getData();
+					if(count($getWhiteList)>=1){						
+					} else {
+						$whitelist->setData(array('ip'=>$ip_address,'is_delete'=>0,'status'=>1,'created_time'=>time()))
+								  ->save();
+					}
+				}			
 								
 				Mage::getSingleton('adminhtml/session')->addSuccess('Configuration saved succesfully.');
 			} catch (Exception $e) {

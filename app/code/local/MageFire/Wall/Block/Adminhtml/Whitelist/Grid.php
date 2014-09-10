@@ -32,11 +32,16 @@ class MageFire_Wall_Block_Adminhtml_Whitelist_Grid extends Mage_Adminhtml_Block_
 			'align'     => 'left',
 			'index'     => 'ip',
         ));
-        /*$this->addColumn('priority', array(
-			'header'    => Mage::helper('wall')->__('Level'),
+        $this->addColumn('text', array(
+			'header'    => Mage::helper('wall')->__('Text'),
 			'align'     => 'left',
-			'index'     => 'priority',
-        ));*/
+			'index'     => 'text',
+        ));
+        $this->addColumn('created_time', array(
+			'header'    => Mage::helper('wall')->__('Created Time'),
+			'align'     => 'left',
+			'index'     => 'created_time',
+        ));
 		return parent::_prepareColumns();
 	}
 	
