@@ -943,6 +943,18 @@ $options = Array
             'text' => 'Allows only Whitelist ip\'s to access admin', 
             'path' => 'allow_whitelist', 
             'value' => '0'
+        ),
+    '6' => Array
+        ( 
+            'text' => 'Admin Login Attempts (Allowed)', 
+            'path' => 'login_lttempts', 
+            'value' => '3'
+        ),
+    '7' => Array
+        ( 
+            'text' => 'Banning Ip Address to access sites', 
+            'path' => 'banning_ip', 
+            'value' => '1'
         )
     );
 foreach ($options as $option) {

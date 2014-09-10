@@ -15,11 +15,11 @@ class MageFire_Wall_Block_Adminhtml_Whitelist_Edit_Tab_Form extends Mage_Adminht
           'name'      => 'ip',
       ));
 
-      /*$fieldset->addField('priority', 'text', array(
-          'label'     => Mage::helper('wall')->__('Level'),
+      $fieldset->addField('text', 'text', array(
+          'label'     => Mage::helper('wall')->__('Text'),
           'required'  => false,
-          'name'      => 'priority',
-	  ));*/
+          'name'      => 'text',
+	  ));
 		
       $fieldset->addField('status', 'select', array(
           'label'     => Mage::helper('wall')->__('Status'),

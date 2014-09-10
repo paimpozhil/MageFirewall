@@ -44,8 +44,7 @@ CREATE TABLE {$this->getTable('firewall_logs')} (
 CREATE TABLE {$this->getTable('firewall_whitelist')} (
   `whitelist_id` int(11) unsigned NOT NULL auto_increment,
   `ip` varchar(255) NOT NULL default '',
-  `priority` varchar(255) NOT NULL default '',
-  `count` varchar(255) NOT NULL default '',
+  `text` text NOT NULL default '',
   `status` smallint(6) NOT NULL default '0',
   `is_delete` smallint(6) NOT NULL default '0',
   `created_time` datetime NULL,
@@ -58,6 +57,7 @@ CREATE TABLE {$this->getTable('firewall_blacklist')} (
   `blacklist_id` int(11) unsigned NOT NULL auto_increment,
   `ip` varchar(255) NOT NULL default '',
   `priority` varchar(255) NOT NULL default '',
+  `text` text NOT NULL default '',
   `count` varchar(255) NOT NULL default '',
   `admin_login` smallint(6) NOT NULL default '0',
   `is_delete` smallint(6) NOT NULL default '0',
@@ -73,7 +73,7 @@ CREATE TABLE {$this->getTable('firewall_options')} (
   `path` varchar(255) NOT NULL default '',
   `text` varchar(255) NOT NULL default '',
   `value` varchar(255) NOT NULL default '',
-  `status` smallint(6) NOT NULL default '0',
+  `status` smallint(6) NOT NULL default '1',
   `created_time` datetime NULL,
   `update_time` datetime NULL,
   PRIMARY KEY (`option_id`)
