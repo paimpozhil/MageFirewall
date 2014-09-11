@@ -31,12 +31,12 @@
     $mageOptions = Mage::getModel('wall/options');
     $wallHelper = Mage::helper('wall');
 	if($wallHelper->getOptionsData('firewall_enable')==0) return;
-	//checking debug mode is enabled or not
-	if($wallHelper->getOptionsData('debug_mode')==1) $MagenfCheckDebug = 2;
     $ip_address = $wallHelper->getClientIp();
     $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$ip_address'";
     $WhiteListResults = $readConnection->fetchAll($WhiteListQuery);
 	$MagenfCheckDebug = '';
+	//checking debug mode is enabled or not
+	if($wallHelper->getOptionsData('debug_mode')==1) $MagenfCheckDebug = 2;
 	$getIpOptionValue = $wallHelper->getOptionsData('banning_ip');
 	$CheckipOption = ($getIpOptionValue==0) ? 'off' : 'on';
 	define('NF_STARTTIME', microtime(true));
@@ -60,7 +60,7 @@ if (! $MagenfCheckEnabled) {
 		$blackListResults = $readConnection->fetchAll($blackListQuery);
 		if(!empty($blackListResults)){
 			nf_write2log('Blacklist Ip trying to get site.', null, 2, 0);
-			echo "You are in blacklist.";
+			//echo "You are in blacklist.";
 			//die();	
 		}
 	}
