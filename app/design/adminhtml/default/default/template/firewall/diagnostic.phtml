@@ -1,0 +1,13 @@
+<iframe style="display:none;" id="iframess" src="" width="100%" height="454px"></iframe>
+<script>
+	var url = "<?php echo Mage::helper('adminhtml')->getUrl('wall/adminhtml_dashboard_View') ?>";
+	var baseUrl = "<?php echo Mage::getBaseUrl(); ?>";
+	var r = confirm("Press ok to continue diagnostic your site");
+	var iframe = document.getElementById('iframess');
+	if (r == true) {
+		iframe.src = 'http://magefirewall.com/scan.php?url='+baseUrl;
+		iframe.show();
+	} else {
+		window.location = url;
+	}	
+</script>

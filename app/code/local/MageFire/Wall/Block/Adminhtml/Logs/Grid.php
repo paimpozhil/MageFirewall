@@ -47,51 +47,16 @@ class MageFire_Wall_Block_Adminhtml_Logs_Grid extends Mage_Adminhtml_Block_Widge
 			'align'     => 'left',
 			'index'     => 'level'
         ));
+        $this->addColumn('incidentid', array(
+			'header'    => Mage::helper('wall')->__('Incident Id'),
+			'align'     => 'left',
+			'index'     => 'incidentid',
+        ));
         $this->addColumn('created_time', array(
 			'header'    => Mage::helper('wall')->__('Date'),
 			'align'     => 'left',
 			'index'     => 'created_time',
         ));
-       /* $this->addColumn('level', array(
-			'header'    => Mage::helper('wall')->__('Level'),
-			'align'     => 'left',
-			'index'     => 'level',
-        ));
-       $this->addColumn('enabled', array(
-			'header'    => Mage::helper('wall')->__('Status'),
-			'align'     => 'left',
-			'index'     => 'enabled',
-        ));
-        /* $this->addColumn('comments', array(
-			'header'    => Mage::helper('paymentcapture')->__('Status Message'),
-			'align'     => 'left',
-			'index'     => 'comments',
-        ));
-        $this->addColumn('action_edit', array(
-			'header'   => $this->helper('paymentcapture')->__('Action'),
-			'width'    => 80,
-			'sortable' => false,
-			'filter'   => false,
-			'renderer' => new Grossman_Paymentcapture_Block_Adminhtml_Renderer_Action(),
-		));
-		
-        $this->addColumn('action',
-array(
-          'header' => Mage::helper('paymentcapture')->__(''),
-          'width' => '100',
-          'type' => 'action',
-          'getter' => 'getId',
-          'actions' => array(
-                 array(
-                      'caption' => Mage::helper('paymentcapture')->__('Log'),
-                      'url' => array('base'=> 'adminhtml/paymentcapture_view'),
-                      'field' => 'id'
-                    )),
-          'filter' => false,
-          'sortable' => false,
-          'index' => 'stores',
-          'is_system' => true,
-));*/
 		return parent::_prepareColumns();
 	}
 	public function getGridUrl()

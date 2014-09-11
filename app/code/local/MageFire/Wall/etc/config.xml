@@ -58,7 +58,12 @@
                         <title>Logs</title>
                         <action>wall/adminhtml_logs</action>
                         <sort_order>400</sort_order>
-                    </logs>
+                    </logs>                    
+                    <logs1>
+                        <title>Diagnostic</title>
+                        <action>wall/adminhtml_dashboard_diagnostic</action>
+                        <sort_order>500</sort_order>
+                    </logs1>
                 </children>
 			</wall>
 		</menu>

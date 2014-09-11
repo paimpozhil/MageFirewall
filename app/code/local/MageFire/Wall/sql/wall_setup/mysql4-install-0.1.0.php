@@ -36,6 +36,7 @@ CREATE TABLE {$this->getTable('firewall_logs')} (
   `summary` text NULL default '',
   `ip` varchar(255) NULL,
   `level` smallint(6) NULL,
+  `incidentid` varchar(255) NULL,
   `created_time` datetime NULL,
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
