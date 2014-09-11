@@ -37,11 +37,21 @@ class MageFire_Wall_Block_Adminhtml_Blacklist_Grid extends Mage_Adminhtml_Block_
 			'align'     => 'left',
 			'index'     => 'text',
         ));
-        $this->addColumn('admin_login', array(
-			'header'    => Mage::helper('wall')->__('Admin Login'),
+         $this->addColumn('status', array(
+          'header'    => Mage::helper('wall')->__('Status'),
+          'align'     => 'left',
+          'width'     => '80px',
+          'index'     => 'status',
+          'type'      => 'options',
+          'options'   => array(
+              1 => 'Enabled',
+              2 => 'Disabled',
+          ),
+		));
+        $this->addColumn('created_time', array(
+			'header'    => Mage::helper('wall')->__('Created Time'),
 			'align'     => 'left',
-			'index'     => 'admin_login',
-			'renderer' 	=> new MageFire_Wall_Block_Adminhtml_Blacklist_Renderer_IsAdmin(),
+			'index'     => 'created_time',
         ));
 		return parent::_prepareColumns();
 	}

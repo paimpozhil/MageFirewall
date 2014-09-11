@@ -15,10 +15,12 @@ class MageFire_Wall_Block_Adminhtml_Whitelist_Edit_Tab_Form extends Mage_Adminht
           'name'      => 'ip',
       ));
 
-      $fieldset->addField('text', 'text', array(
-          'label'     => Mage::helper('wall')->__('Text'),
+      $fieldset->addField('text', 'editor', array(
+          'label'     => Mage::helper('wall')->__('Reason'),
           'required'  => false,
           'name'      => 'text',
+          'style'     => 'width:274px; height:200px;',
+          'wysiwyg'   => false,
 	  ));
 		
       $fieldset->addField('status', 'select', array(
@@ -35,16 +37,7 @@ class MageFire_Wall_Block_Adminhtml_Whitelist_Edit_Tab_Form extends Mage_Adminht
                   'label'     => Mage::helper('wall')->__('Disabled'),
               ),
           ),
-      ));
-     
-      /*$fieldset->addField('content', 'editor', array(
-          'name'      => 'content',
-          'label'     => Mage::helper('wall')->__('Content'),
-          'title'     => Mage::helper('wall')->__('Content'),
-          'style'     => 'width:700px; height:500px;',
-          'wysiwyg'   => false,
-          'required'  => true,
-      ));*/
+      ));     
      
       if ( Mage::getSingleton('adminhtml/session')->getWhitelistData() )
       {

@@ -124,6 +124,14 @@
 					</MageFire_Wall_Model_Observer>
 				</observers>
 			</admin_session_user_login_failed>
+			<admin_session_user_login_success>
+				<observers>
+					<MageFire_Wall_Model_Observer>
+						<class>MageFire_Wall_Model_Observer</class>
+						<method>checkBlacklist</method>
+					</MageFire_Wall_Model_Observer>
+				</observers>
+			</admin_session_user_login_success>			
 		</events>
         <resources>
             <wall_setup>

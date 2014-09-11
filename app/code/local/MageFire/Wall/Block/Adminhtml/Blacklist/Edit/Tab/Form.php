@@ -15,11 +15,12 @@ class MageFire_Wall_Block_Adminhtml_Blacklist_Edit_Tab_Form extends Mage_Adminht
           'name'      => 'ip',
       ));
 
-      $fieldset->addField('text', 'text', array(
+      $fieldset->addField('text', 'editor', array(
           'label'     => Mage::helper('wall')->__('Text'),
           'required'  => false,
           'name'      => 'text',
           'style'     => 'width:274px; height:200px;',
+          'wysiwyg'   => false,
 	  ));
 		
       $fieldset->addField('status', 'select', array(
