@@ -1,7 +1,7 @@
 <?php
 /*
  +------------------------------------------------------------------+
- | NinjaFirewall   (c)2012-2013 NinTechNet                          |
+ | Firewall   (c)2012-2013 NinTechNet                          |
  |                 <contact@ninjafirewall.com>                      |
  |                                                                  |
  | EDITION :       Free Edition                                     |
@@ -18,7 +18,7 @@
  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    |
  | GNU General Public License for more details.                     |
  +------------------------------------------------------------------+
-*/  
+*/ 
 	$mageFilename = 'app/Mage.php';
 	require_once $mageFilename;
 	Mage::setIsDeveloperMode(true);
@@ -30,13 +30,13 @@
     $readConnection = $resource->getConnection('core_read'); 
     $mageOptions = Mage::getModel('wall/options');
     $wallHelper = Mage::helper('wall');
-	if($wallHelper->getOptionsData('debug_mode')==0) return;
+	if($wallHelper->getOptionsData('firewall_enable')==0) return;
+	//checking debug mode is enabled or not
+	if($wallHelper->getOptionsData('debug_mode')==1) $MagenfCheckDebug = 2;
     $ip_address = $wallHelper->getClientIp();
     $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$ip_address'";
     $WhiteListResults = $readConnection->fetchAll($WhiteListQuery);
 	$MagenfCheckDebug = '';
-	//checking debug mode is enabled or not
-	if($wallHelper->getOptionsData('firewall_enable')==1) $MagenfCheckDebug = 2;
 	$getIpOptionValue = $wallHelper->getOptionsData('banning_ip');
 	$CheckipOption = ($getIpOptionValue==0) ? 'off' : 'on';
 	define('NF_STARTTIME', microtime(true));
@@ -48,7 +48,7 @@ if ($MagenfCheckDebug) {
    register_shutdown_function('nf_debugfirewall', $MagenfCheckDebug);
    define('STAG', '- ');
    define('ETAG', "\n");
-   $nfdebug = STAG ."starting NinjaFirewall". ETAG . STAG ."hooked PHP script\t\t[----]   ". $_SERVER['SCRIPT_FILENAME'] . ETAG;
+   $nfdebug = STAG ."starting Firewall". ETAG ;// STAG ."hooked PHP script\t\t[----]   ". $_SERVER['SCRIPT_FILENAME'] . ETAG;
 }
 
 if (! $MagenfCheckEnabled) {
@@ -77,7 +77,7 @@ if ( ($_SERVER['SCRIPT_FILENAME'] == dirname(__FILE__) .'/index.php') || ($_SERV
 }
 if (preg_match('/^[\d.:]+$/', $_SERVER['HTTP_HOST'])) {
 	if ($MagenfCheckDebug) { $nfdebug.= STAG ."HTTP_HOST\t\t\t[FAIL]   HTTP_HOST is an IP (".$_SERVER['HTTP_HOST']  .')'. ETAG; }
-	nf_write2log('sHTTP_HOST is an IP', $_SERVER['HTTP_HOST'], 1, 0);
+	nf_write2log('HTTP_HOST is an IP', $_SERVER['HTTP_HOST'], 1, 0);
 	if($getIpOptionValue==1){
 		nf_block();
 	}
@@ -126,13 +126,13 @@ function nf_debugfirewall($debug) {
 	list($nfdebug, $bench) = explode('::', NFDEBUG . '::');
 
    if ($debug == 1) {
-      echo "\n<!--\n". htmlentities( $nfdebug ) ."- stopping NinjaFirewall\n- processing time:\t\t$bench s\n-->"  ;
+      echo "\n<!--\n". htmlentities( $nfdebug ) ."- stopping Firewall\n- processing time:\t\t$bench s\n-->"  ;
    } else {
 		echo '<br><script>function onoff(){if(document.getElementById("tex").style.display=="none"){document.getElementById("tex").style.display="";document.getElementById("fie").style.background="#000000";document.cookie="tex=0; expires=Thu, 01-Jan-70 00:00:01 GMT;";}else{document.getElementById("tex").style.display="none";document.getElementById("fie").style.background="none";document.cookie="tex=1;";}}</script>'. "\n". '<center><fieldset id=fie style="width:85%;font-family:Verdana,Arial,sans-serif,Ubuntu;font-size:10px;background:';
 		if ( (isset($_COOKIE['tex'])) && ($_COOKIE['tex'])==1) {echo 'none';} else {echo '#000000';}
-		echo ';border:0px solid #000000;padding:0px;"><legend id=leg style="border:1px solid #ffd821;background:#ffd821;font-family:Verdana,Arial,sans-serif,Ubuntu;font-size:10px;"><a title=\'Click to mask/show the console\' href="javascript:onoff();" style="text-decoration: none;color:#000000;background:#ffd821;"><b>&nbsp;NinjaFirewall debug console&nbsp;</b></a></legend><textarea id=tex rows='. count(explode("\n", $nfdebug)) .' style="font-family:\'Courier New\',Courier,monospace,Verdana, Arial, sans-serif;font-size:12px;width:100%;border:none;padding:0px;background:#000000;color:#ffffff;line-height:14px;';
+		echo ';border:0px solid #000000;padding:0px;"><legend id=leg style="border:1px solid #ffd821;background:#ffd821;font-family:Verdana,Arial,sans-serif,Ubuntu;font-size:10px;"><a title=\'Click to mask/show the console\' href="javascript:onoff();" style="text-decoration: none;color:#000000;background:#ffd821;"><b>&nbsp;Firewall debug console&nbsp;</b></a></legend><textarea id=tex rows='. count(explode("\n", $nfdebug)) .' style="font-family:\'Courier New\',Courier,monospace,Verdana, Arial, sans-serif;font-size:12px;width:100%;border:none;padding:0px;background:#000000;color:#ffffff;line-height:14px;';
 		if ( (isset($_COOKIE['tex'])) && ($_COOKIE['tex'])==1) {echo 'display:none;'; }
-		echo '" wrap="off">'. htmlentities( $nfdebug ) ."- stopping NinjaFirewall\n- processing time\t\t$bench s</textarea></fieldset></center><br>";
+		echo '" wrap="off">'. htmlentities( $nfdebug ) ."- stopping Firewall\n- processing time\t\t$bench s</textarea></fieldset></center><br>";
    }
 }
 /* ================================================================ */
@@ -362,7 +362,7 @@ function nf_write2log( $loginfo, $logdata, $loglevel, $ruleid ) {
       '[' . $_SERVER['SCRIPT_NAME'] . '] ' . '[' . $loginfo . '] ' .
       '[' . nf_bin2hex_string($logdata) . ']' . "\n";
    Mage::getModel('wall/logs')
-        ->setData(array('summary'=>$message,'ruleid'=>$ruleid,'level'=>$loglevel,'ip'=>$ip_address,'created_time'=>time()))
+        ->setData(array('summary'=>$message,'ruleid'=>$ruleid,'level'=>$loglevel,'ip'=>$ip_address,'incidentid'=>$rand_value,'created_time'=>time()))
         ->save();
    Mage::log($message, null, "firewall_-".date('Y-m-d').".log");
   // fclose($handle);
