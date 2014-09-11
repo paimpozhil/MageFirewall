@@ -18,13 +18,14 @@
  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    |
  | GNU General Public License for more details.                     |
  +------------------------------------------------------------------+
-*/
+*/  
 	$mageFilename = 'app/Mage.php';
 	require_once $mageFilename;
 	Mage::setIsDeveloperMode(true);
 	ini_set('display_errors', 1);
 	umask(0);
-	Mage::app();	
+	Mage::app();
+	if(!Mage::helper('core')->isModuleEnabled('MageFire_Wall')) return;
     $resource = Mage::getSingleton('core/resource');
     $readConnection = $resource->getConnection('core_read'); 
     $mageOptions = Mage::getModel('wall/options');
@@ -64,8 +65,8 @@ if (! $MagenfCheckEnabled) {
 		}
 	}
 if ($MagenfCheckDebug) { $nfdebug.= STAG ."checking user IP\t\t";}
-if ( (preg_match('/^(?:::ffff:)?127\.0\.0\.1$/', $_SERVER['REMOTE_ADDR'])) || ($_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR']) ) {
-   if ($MagenfCheckDebug) { define('NFDEBUG', $nfdebug.= '[STOP]   '. $_SERVER['REMOTE_ADDR'] .' is whitelisted'. ETAG . '::' . nf_benchmarks() ); }
+if ( (preg_match('/^(?:::ffff:)?127\.0\.0\.1$/', $ip_address)) || ($ip_address == $_SERVER['SERVER_ADDR']) ) {
+   if ($MagenfCheckDebug) { define('NFDEBUG', $nfdebug.= '[STOP]   '. $ip_address .' is whitelisted'. ETAG . '::' . nf_benchmarks() ); }
    return;
 }
 
@@ -321,10 +322,11 @@ function nf_block() {
 
    global $nfdebug;
    global $rand_value;
+   global $ip_address;
 
    header('HTTP/1.1 403 Forbidden');
 	header('Status: 403 Forbidden');
-	echo '<html><head><title>403 Forbidden</title><style>.smallblack{font-family:Verdana,Arial,Helvetica,Ubuntu,"Bitstream Vera Sans",sans-serif;font-size:12px;line-height:16px;color:#000000;}.tinygrey{font-family:Verdana,Arial,Helvetica,Ubuntu, "Bitstream Vera Sans",sans-serif;font-size:10px;line-height:12px;color:#999999;}</style></head><body><br><br><br><br><br><table align=center style="border:1px solid #FDCD25;" cellspacing=0 cellpadding=6 class=smallblack><tr><td align=center><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH1goFFS4tIeiJwwAAAqNJREFUOMttk9trXFUUxn97nz0zZ+ZEEnNFwSAhVQoKEcFCqaJ9CQhBnxRC639QCvqgkJdQGoo3fBbxQmlLzIPoQ0SKEAQlITEEL6mkScUmJ2MymclJzlzOTM6cs3w4U3OhH+yXtdb3fWvtxVKcwPI4g20Z3nW6H30509HvgCLcc2tVr/hT4PPRU1f5i4dhZhzjfpz+Mpx/25fdJZE4kkPEIt7vEi68429+kr3x66ekjpFlCqvwef+8FH6OJPRFQl+q+9vy9eQtuXnjupQK6/IgLsW5aOeLJxeXx0kDGIC8y2ePvzb+HCanKa8BsHLnH+YXFjHG0NUmDL/0bOKm07r7/MRQ+O1bX0E0au59wKmegadHMI6hsgoa0FD11snn81iWxc52BglslAAxoIzuHjg9vPbhn88Yx+G9VC7dTbCW9KMTo9r+Jq7rorVmr2ghQRqlFQgQQiqb7mxvY8zkOjgHGxCuQgSoRCQob+O6LkopdosCByrJCUkd97HbecGYHDZ6D6qzYPf8L1ArF9nY2Eg62G0iYQRKJSM0SqBLGIeMUVkUFnBwF9QWpOxkM3GdZrMJQHhQBGkk5LAOB34yrg1GFA1SgCWg90Htg4InHjtcc19PDaVqrS0AKaAJommYsMFstpNBaCVM8l48C79MgbsFr5wBbbdm161/MhB5LOlmhfdjGx/TEkgBaVhx4c3LcOkK/PF3EjtqIFnKUcA13TXKcrDDD7QRYx2KfHMb3H+hUITJaYj0EQGHuF7gx443WNQATpGLjT2WeIQIKyl6fQT6eqGrE0ZeBcsGrITc8FjOVrhw/B6+J1OfYyr28MRHxEfiKhIHiFQQKSOxh1ef5zuZwX7AUyevsjLNUKqXMauL51WOtIAioB6V+K1ZYsIZZvFo/X+fTjL6xSvBJAAAAABJRU5ErkJggg==" border=0 width=16 height=16><p>Sorry <b>'. $_SERVER['REMOTE_ADDR'] .'</b>, your request cannot be proceeded.<br>For security reason it was blocked and logged.<p>If you think that this was a mistake, please contact<br>the webmaster and enclose the following incident ID&nbsp;:<p>[<b>#' . $rand_value . '</b>]<br>&nbsp;</td></tr></table><br><br><br><br></body></html>';
+	echo '<html><head><title>403 Forbidden</title><style>.smallblack{font-family:Verdana,Arial,Helvetica,Ubuntu,"Bitstream Vera Sans",sans-serif;font-size:12px;line-height:16px;color:#000000;}.tinygrey{font-family:Verdana,Arial,Helvetica,Ubuntu, "Bitstream Vera Sans",sans-serif;font-size:10px;line-height:12px;color:#999999;}</style></head><body><br><br><br><br><br><table align=center style="border:1px solid #FDCD25;" cellspacing=0 cellpadding=6 class=smallblack><tr><td align=center><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH1goFFS4tIeiJwwAAAqNJREFUOMttk9trXFUUxn97nz0zZ+ZEEnNFwSAhVQoKEcFCqaJ9CQhBnxRC639QCvqgkJdQGoo3fBbxQmlLzIPoQ0SKEAQlITEEL6mkScUmJ2MymclJzlzOTM6cs3w4U3OhH+yXtdb3fWvtxVKcwPI4g20Z3nW6H30509HvgCLcc2tVr/hT4PPRU1f5i4dhZhzjfpz+Mpx/25fdJZE4kkPEIt7vEi68429+kr3x66ekjpFlCqvwef+8FH6OJPRFQl+q+9vy9eQtuXnjupQK6/IgLsW5aOeLJxeXx0kDGIC8y2ePvzb+HCanKa8BsHLnH+YXFjHG0NUmDL/0bOKm07r7/MRQ+O1bX0E0au59wKmegadHMI6hsgoa0FD11snn81iWxc52BglslAAxoIzuHjg9vPbhn88Yx+G9VC7dTbCW9KMTo9r+Jq7rorVmr2ghQRqlFQgQQiqb7mxvY8zkOjgHGxCuQgSoRCQob+O6LkopdosCByrJCUkd97HbecGYHDZ6D6qzYPf8L1ArF9nY2Eg62G0iYQRKJSM0SqBLGIeMUVkUFnBwF9QWpOxkM3GdZrMJQHhQBGkk5LAOB34yrg1GFA1SgCWg90Htg4InHjtcc19PDaVqrS0AKaAJommYsMFstpNBaCVM8l48C79MgbsFr5wBbbdm161/MhB5LOlmhfdjGx/TEkgBaVhx4c3LcOkK/PF3EjtqIFnKUcA13TXKcrDDD7QRYx2KfHMb3H+hUITJaYj0EQGHuF7gx443WNQATpGLjT2WeIQIKyl6fQT6eqGrE0ZeBcsGrITc8FjOVrhw/B6+J1OfYyr28MRHxEfiKhIHiFQQKSOxh1ef5zuZwX7AUyevsjLNUKqXMauL51WOtIAioB6V+K1ZYsIZZvFo/X+fTjL6xSvBJAAAAABJRU5ErkJggg==" border=0 width=16 height=16><p>Sorry <b>'. $ip_address .'</b>, your request cannot be proceeded.<br>For security reason it was blocked and logged.<p>If you think that this was a mistake, please contact<br>the webmaster and enclose the following incident ID&nbsp;:<p>[<b>#' . $rand_value . '</b>]<br>&nbsp;</td></tr></table><br><br><br><br></body></html>';
 
    if ($nfdebug) {define('NFDEBUG', $nfdebug . '::' . nf_benchmarks() );}
 
@@ -337,6 +339,7 @@ function nf_write2log( $loginfo, $logdata, $loglevel, $ruleid ) {
    global $MagenfCheckDebug;
    global $rand_value;
    global $nfdebug;
+   global $ip_address;
 
 	if ( ($loglevel == 6) || ($loglevel == 5) ) {
 		$rand_value = '0000000';
@@ -359,7 +362,7 @@ function nf_write2log( $loginfo, $logdata, $loglevel, $ruleid ) {
       '[' . $_SERVER['SCRIPT_NAME'] . '] ' . '[' . $loginfo . '] ' .
       '[' . nf_bin2hex_string($logdata) . ']' . "\n";
    Mage::getModel('wall/logs')
-        ->setData(array('summary'=>$message,'ruleid'=>$ruleid,'level'=>$loglevel,'ip'=>$_SERVER['REMOTE_ADDR'],'created_time'=>time()))
+        ->setData(array('summary'=>$message,'ruleid'=>$ruleid,'level'=>$loglevel,'ip'=>$ip_address,'created_time'=>time()))
         ->save();
    Mage::log($message, null, "firewall_-".date('Y-m-d').".log");
   // fclose($handle);

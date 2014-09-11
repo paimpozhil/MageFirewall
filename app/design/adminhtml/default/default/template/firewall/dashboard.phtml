@@ -37,6 +37,31 @@ $senderEmail = $wallHelper->getMageEmail();
 <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
 <table class="firewall-options-form-table">
 	<tbody>
+		<tr><th><h2>General Information</h2></th></tr>
+		<tr>
+			<th scope="row"><?php echo $optionsAll[1]['text']; ?></th>
+			<td width="20" align="left">
+				<?php 
+				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$autoprependimageIcon.'">'; ?>
+			</td>
+			<td align="left">
+				<input type="hidden" name="fireWall_options[2][option_id]" value="<?php echo $optionsAll[1]['option_id']; ?>">
+				<select style="width:200px" name="fireWall_options[2][value]" disabled>
+					<option  value="1"> <?php echo $autoprepend; ?></option>
+				</select>
+				<?php if($firewallDisabled==0) { echo $autoprependMsg; } ?>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Hacking Attempts</th>
+			<td></td>
+			<td align="left">
+				<a href="<?php echo  Mage::helper("adminhtml")->getUrl("wall/adminhtml_logs/index"); ?>">
+					<?php echo $_blockData = $wallHelper->getLogsCount(); ?>
+				</a>
+			</td>
+		</tr>
+		<tr><th><h2>Basic Configuration</h2></th></tr>
 		<tr>
 			<th scope="row"><?php echo $optionsAll[0]['text']; ?></th>
 			<td width="20" align="left">
@@ -52,31 +77,15 @@ $senderEmail = $wallHelper->getMageEmail();
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?php echo $optionsAll[1]['text']; ?></th>
-			<td width="20" align="left">
-				<?php //$imageIcon = ($optionsAll[1]['value']==1) ? 'success_msg_icon.gif' : 'error_msg_icon.gif'; 
-				//echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$imageIcon.'">'; ?>
-			</td>
-			<td align="left">
-				<input type="hidden" name="fireWall_options[2][option_id]" value="<?php echo $optionsAll[1]['option_id']; ?>">
-				<select style="width:200px" name="fireWall_options[2][value]">
-					<option <?php echo ($optionsAll[1]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
-					<option <?php echo ($optionsAll[1]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
 			<th scope="row"><?php echo $optionsAll[2]['text']; ?></th>
-			<td width="20" align="left">
-				<?php 
-				echo '<img width="16" height="16" border="0" src="/skin/adminhtml/default/default/images/'.$autoprependimageIcon.'">'; ?>
+			<td width="20" align="left">				
 			</td>
 			<td align="left">
-				<input type="hidden" name="fireWall_options[3][option_id]" value="<?php echo $optionsAll[2]['option_id']; ?>">
-				<select style="width:200px" name="fireWall_options[3][value]" disabled>
-					<option  value="1"> <?php echo $autoprepend; ?></option>
+				<input type="hidden" name="fireWall_options[3][option_id]" value="<?php echo $optionsAll[2]['option_id']; ?>">				
+				<select style="width:200px" name="fireWall_options[3][value]">
+					<option <?php echo ($optionsAll[2]['value']==1) ? 'selected=""' : ''; ?>  value="1">Enabled</option>
+					<option <?php echo ($optionsAll[2]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
 				</select>
-				<?php if($firewallDisabled==0) { echo $autoprependMsg; } ?>
 			</td>
 		</tr>
 		<tr>
@@ -96,16 +105,7 @@ $senderEmail = $wallHelper->getMageEmail();
 				<input type="text" name="fireWall_options[5][value]" value="<?php echo (empty($optionsAll[4]['value'])) ? $senderEmail : $optionsAll[4]['value']; ?>" />
 			</td>
 		</tr>
-		<tr>
-			<th scope="row">Hacking Attempts</th>
-			<td></td>
-			<td align="left">
-				<a href="<?php echo  Mage::helper("adminhtml")->getUrl("wall/adminhtml_logs/index"); ?>">
-					<?php echo $_blockData = $wallHelper->getLogsCount(); ?>
-				</a>
-			</td>
-		</tr>
-		<tr>
+		<?php /*<tr>
 			<th scope="row"><?php echo $optionsAll[5]['text']; ?></th>
 			<td></td>
 			<td align="left">
@@ -115,7 +115,7 @@ $senderEmail = $wallHelper->getMageEmail();
 					<option <?php echo ($optionsAll[5]['value']==0) ? 'selected=""' : ''; ?> value="0">Disabled</option>
 				</select>
 			</td>
-		</tr>
+		</tr> */ ?>
 		<tr>
 			<th scope="row"><?php echo $optionsAll[6]['text']; ?></th>
 			<td></td>

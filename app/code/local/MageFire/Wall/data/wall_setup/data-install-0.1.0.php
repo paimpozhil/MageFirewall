@@ -912,17 +912,17 @@ $options = Array
         ), 
 
     '1' => Array
-        ( 
-           'text' => 'Console mode', 
-            'path' => 'debug_mode', 
-            'value' => '0' 
-        ), 
-
-    '2' => Array
         (  
             'text' => 'Prepend configuration', 
             'path' => 'prepend_configuration', 
             'value' => ''
+        ), 
+
+    '2' => Array
+        ( 
+           'text' => 'Console mode', 
+            'path' => 'debug_mode', 
+            'value' => '0' 
         ), 
 
     '3' => Array
@@ -952,7 +952,7 @@ $options = Array
         ),
     '7' => Array
         ( 
-            'text' => 'Banning Ip Address to access sites', 
+            'text' => 'Ban attacking IPs from accessing site', 
             'path' => 'banning_ip', 
             'value' => '0'
         )
