@@ -60,7 +60,7 @@ if (! $MagenfCheckEnabled) {
 		$blackListResults = $readConnection->fetchAll($blackListQuery);
 		if(!empty($blackListResults)){
 			nf_write2log('Blacklist Ip trying to get site.', null, 2, 0);
-			echo "You are in blacklist.";
+			//echo "You are in blacklist.";
 			//die();	
 		}
 	}
