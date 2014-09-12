@@ -19,7 +19,7 @@
     <adminhtml>
 		<menu>
 			<wall module="wall">
-				<title>FireWall</title>
+				<title>Firewall</title>
 				<sort_order>71</sort_order>               
 				<!--<children>
 					<items module="wall">
@@ -82,13 +82,6 @@
 				</admin>
 			</resources>
 		</acl>
-		<layout>
-			<updates>
-				<wall>
-					<file>wall.xml</file>
-				</wall>
-			</updates>
-		</layout>
     </adminhtml>  
     <global>
         <models>

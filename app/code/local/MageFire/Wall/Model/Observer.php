@@ -1,6 +1,9 @@
 <?php
 class MageFire_Wall_Model_Observer
 {
+	/* 
+	 * store ipaddress in blacklist if admin entered wrong password
+	 * */
     public function login_validation($observer = null)
     {
         $event = $observer->getEvent(); 
@@ -30,22 +33,23 @@ class MageFire_Wall_Model_Observer
 		$wallHelper = Mage::helper('wall');	
 		$loginMaxCount = (int) $wallHelper->getOptionsData('login_lttempts');
 		$ip_address = $wallHelper->getClientIp();
+		$checkipinblacklist = $blacklistModel->getCollection()
+											->addFieldToFilter('count',array('lt' => $loginMaxCount))
+											->addFieldToFilter('ip',$ip_address)->getData();
+        if($checkipinblacklist){
+			$blacklistModel->setId($checkipinblacklist[0]['blacklist_id'])
+					->delete();	    
+	    }
         $getBlackListIp = $blacklistModel->getCollection()
 										 ->addFieldToFilter('ip',$ip_address)
 										 ->addFieldToFilter('status','1')
 										 ->addFieldToFilter('count',array('gteq' => $loginMaxCount))->getData();
- 
-								 
+						 
 		if($getBlackListIp)	{							 
 			$session = Mage::getSingleton('adminhtml/session');    
-			$session->setId(null)
-			   ->getCookie()->delete('adminhtml');	
-			    Mage::app()->getResponse()->setBody(Mage::helper('adminhtml')->__('Customer move error'));
-			$message = 'Email Id Already Exist.';
-			Mage::getSingleton('adminhtml/session')->addError($message);	   
-			$session = Mage::getSingleton('admin/session');
-            $session->addError('Your IP in Blacklist.');
-			return;           
+			$adminSession = Mage::getSingleton('admin/session');
+			$adminSession->unsetAll();
+			$adminSession->getCookie()->delete($adminSession->getSessionName());         
 		}
 	}
 }
