@@ -28,7 +28,7 @@ if (strpos($firewalFile,'lib/firewall/firewall.php') !== false || in_array($path
 					"define(\'MAGENTO_ROOT\', getcwd());"  <br /> 
 					require_once MAGENTO_ROOT.\'/lib/firewall/firewall.php\';</p> or';
 	$autoprependMsg .='<p class="critical">add the below line to your php.ini / fastphp / in your vhost configuration file. <br /> 	
-					auto_prepend_file '.$paths.'</p>';
+					auto_prepend_file = '.$paths.'</p>';
 	
 }
 $senderEmail = $wallHelper->getMageEmail();
