@@ -2,17 +2,7 @@ MageFirewall
 ============
 
 Magento Firewall for securing your e-commerce system. 
-
-
-## Beta
-
-MageFirewall is in Beta, so please use with care.
-
-Test it in your testing/staging before even thinking about production.
-
-We accept no responsibility if this plugin causes any downtime to your store or locks you out from the Admin area.
-
-Please consider buy support from us to help the development process.
+Tested to work with Magento 1.6 and above.
 
 
 ## Install
@@ -36,6 +26,13 @@ Need support?
 
 Please buy Installation/support from from http://magefirewall.com
 
+## Beta
+
+MageFirewall is in Beta, so please use with care.
+Test it in your testing/staging before even thinking about production.
+
+We accept no responsibility if this plugin causes any downtime to your store or locks you out from the Admin area.
+Please consider buy support from us to help the development process.
 
 ## Credits
 
