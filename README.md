@@ -4,8 +4,16 @@ MageFirewall
 Magento Firewall for securing your e-commerce system. 
 
 
-## THIS IS UNDER DEVELOPMENT.  
-Please do not use this code as it might kill your shopping cart.
+## Beta
+
+MageFirewall is in Beta, so please use with care.
+
+Test it in your testing/staging before even thinking about production.
+
+We accept no responsibility if this plugin causes any downtime to your store or locks you out from the Admin area.
+
+Please consider buy support from us to help the development process.
+
 
 ## Install
 
