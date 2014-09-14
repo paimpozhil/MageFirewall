@@ -60,7 +60,7 @@
                         <sort_order>400</sort_order>
                     </logs>                    
                     <logs1>
-                        <title>Diagnostic</title>
+                        <title>Scan your Store</title>
                         <action>wall/adminhtml_dashboard_diagnostic</action>
                         <sort_order>500</sort_order>
                     </logs1>
