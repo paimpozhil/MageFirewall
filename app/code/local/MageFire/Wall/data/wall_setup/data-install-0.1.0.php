@@ -913,7 +913,7 @@ $options = Array
 
     '1' => Array
         (  
-            'text' => 'Prepend configuration', 
+            'text' => 'Firewall Loaded ?', 
             'path' => 'prepend_configuration', 
             'value' => ''
         ), 
