@@ -22,10 +22,19 @@ class MageFire_Wall_Model_Cron extends Varien_Object
 				$model->setId(trim($logId['log_id']))
 					  ->delete();					  
 				}
-		}	
+		}
 		$editedFiles = $wallHelper->getRecentEditedFiles();
-		$this->notify('admin user',$wallHelper->getMageEmail(),'Last Modified Email Notify',$editedFiles[1]);
+		$this->notify('admin user',$this->getSenderEmail(),'Magento store - MageFirewal',$editedFiles[1]);
 		return;
+	}
+	
+	public function getSenderEmail()
+    { 
+		$sendToEmail = Mage::helper('wall')->getMageEmail();
+		if(Mage::helper('wall')->getOptionsData('email_addresss')) { 
+			$sendToEmail = Mage::helper('wall')->getOptionsData('email_addresss');			
+		}
+		return $sendToEmail;
 	}
 	
 	public function getLogDays()
@@ -34,15 +43,14 @@ class MageFire_Wall_Model_Cron extends Varien_Object
 	}
 	
 	public function notify($sendToName, $sendToEmail, $subject, $msg) { 
-		Mage::log("Sending email to $sendTo");	 
 		$mail = Mage::getModel('core/email');
 		$mail->setToName($sendToName);
 		$mail->setToEmail($sendToEmail);
 		$mail->setBody($msg);
-		$mail->setSubject('=?utf-8?B?'.base64_encode($subject).'?=');
-		$mail->setFromEmail("infp@magefirewall.com");
-		$mail->setFromName("MageFirewall");
-		$mail->setType('text');
+		$mail->setSubject($subject);
+		$mail->setFromEmail(Mage::getStoreConfig('trans_email/ident_general/email'));
+		$mail->setFromName(Mage::getStoreConfig('trans_email/ident_general/name'));
+		$mail->setType('html');
 	 
 		try {
 			$mail->send();

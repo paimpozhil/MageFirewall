@@ -3,7 +3,7 @@
     <modules>
         <MageFire_Wall>
             <active>true</active>
-            <codePool>local</codePool>
+            <codePool>community</codePool>
         </MageFire_Wall>
     </modules>
 </config> 

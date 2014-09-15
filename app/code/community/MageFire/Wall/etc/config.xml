@@ -64,6 +64,11 @@
                         <action>wall/adminhtml_dashboard_diagnostic</action>
                         <sort_order>500</sort_order>
                     </logs1>
+                    <diagnostic>
+                        <title>Diagnostic</title>
+                        <action>wall/adminhtml_dashboard_filechecker</action>
+                        <sort_order>550</sort_order>
+                    </diagnostic>
                 </children>
 			</wall>
 		</menu>
