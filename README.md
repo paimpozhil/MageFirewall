@@ -15,6 +15,8 @@ Tested to work with Magento 1.6 and above.
 * Prevents bruteforcing on your admin credentials/ adds attackers to black list
 * Debug/Diagnostics/Ninja Firewall Consoles availabe
 
+More information & support available at http://magefirewall.com
+
 
 ## Install
 
