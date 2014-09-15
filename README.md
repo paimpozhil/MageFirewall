@@ -31,7 +31,7 @@ curl https://raw.githubusercontent.com/paimpozhil/MageFirewall/master/install.sh
 
 #### FTP
 Download the https://github.com/paimpozhil/MageFirewall/archive/master.zip
-and extract the folder called MageFirewall-master.. upload contents to your root of the magento system.
+and extract the folder called MageFirewall-master.. upload contents to the root folder of your Magento installation.
 
 ## Support 
 
@@ -41,11 +41,11 @@ Please buy Installation/support from from http://magefirewall.com
 
 ## Beta
 
-MageFirewall is in Beta, so please use with care.
-Test it in your testing/staging before even thinking about production.
+MageFirewall is in Beta, so please use carefully.
+You should test this extension in a testing / staging enivornment before pushing to a live site.
 
 We accept no responsibility if this plugin causes any downtime to your store or locks you out from the Admin area.
-Please consider buy support from us to help the development process.
+If you are concerned about errors that may occur we offer a paid support service.
 
 ## Credits
 
