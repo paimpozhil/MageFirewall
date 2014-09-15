@@ -4,6 +4,17 @@ MageFirewall
 Magento Firewall for securing your e-commerce system. 
 Tested to work with Magento 1.6 and above.
 
+###Features
+
+* Neat Dashboard
+* Alert / List about recently modified files which has potentially dangerous code
+* Incorporates rules from NinjaFirewall to analyze / stop the attackers
+* Scan your magento from internet for security issues on your magento.
+* Scans your magento installation from within and checks if you have unpatched security issues.
+* Has Whitelisting/Blacklisting 
+* Prevents bruteforcing on your admin credentials/ adds attackers to black list
+* Debug/Diagnostics/Ninja Firewall Consoles availabe
+
 
 ## Install
 
