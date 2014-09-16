@@ -29,7 +29,7 @@ cd /path/to/magento
 curl https://raw.githubusercontent.com/paimpozhil/MageFirewall/master/install.sh | sh
 ```
 
-#### FTP
+##### FTP
 Download the https://github.com/paimpozhil/MageFirewall/archive/master.zip
 and extract the folder called MageFirewall-master.. upload contents to the root folder of your Magento installation.
 
@@ -51,4 +51,4 @@ If you are concerned about errors that may occur we offer a paid support service
 
 Thanks to NinjaFirewall , We used rules/some code from their free/opensource version.
 
-#### http://ninjafirewall.com/
+###### http://ninjafirewall.com/
