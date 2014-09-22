@@ -1,0 +1,22 @@
+<h1>Diagnostic Result</h1>
+<?php
+$wallHelper = Mage::helper('firewall');
+$phpVs = 0;
+echo 'Magento version is: ', Mage::getVersion() . "<br />";
+if (version_compare(phpversion(), '5.3.0', '<')===true) {
+	$phpVs = 1;
+	echo 'PHP version: ' . phpversion();
+	echo "<br /> Whoops, it looks like you have an older PHP version.";
+} else {
+	echo 'PHP version: ' . phpversion() .' (stable)';
+}
+$check1[0]['exploitname'] = '';
+$check1[0]['data'][0]['searchstring'] = "libxml_disable_entity_loader(\$loadEntities);";
+$check1[0]['data'][0]['filelocation'] = "lib/Zend/XmlRpc/Response.php";
+$check1[0]['error'] = "Major security issue please fix this!!!";
+$phpVs = 1;
+$wallHelper->startprocess($check1[0]);
+echo "Currently your website is safe. ";
+echo "<br />";
+echo "<h3>Please contact us at <a href='http://magefirewall.com'>magefirewall</a> or Tweet us at <a href='https://twitter.com/MageFirewall'>@MageFirewall</a> </h3>"; 
+?>

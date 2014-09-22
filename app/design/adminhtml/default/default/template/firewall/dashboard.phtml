@@ -8,11 +8,11 @@
 .critical { color: #D20000; }
 </style>
 <?php 
-$wallHelper = Mage::helper('wall');
+$wallHelper = Mage::helper('firewall');
 $getIncludedFile = get_included_files(); 
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
 $paths = $rootPath.'/lib/firewall/firewall.php';
-$optionsAll = Mage::getModel('wall/options')->getCollection()->getData();
+$optionsAll = Mage::getModel('firewall/options')->getCollection()->getData();
 $firewalFile = ini_get('auto_prepend_file');
 $autoprepend = '<b>No</b>.'; 
 $autoprependimageIcon =   'error_msg_icon.gif';
@@ -56,7 +56,7 @@ $senderEmail = $wallHelper->getMageEmail();
 			<th scope="row">Hacking Attempts</th>
 			<td></td>
 			<td align="left">
-				<a href="<?php echo  Mage::helper("adminhtml")->getUrl("wall/adminhtml_logs/index"); ?>">
+				<a href="<?php echo  Mage::helper("adminhtml")->getUrl("firewall/adminhtml_logs/index"); ?>">
 					<?php echo $_blockData = $wallHelper->getLogsCount(); ?>
 				</a>
 			</td>

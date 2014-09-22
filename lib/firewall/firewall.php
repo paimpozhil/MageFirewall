@@ -18,18 +18,23 @@
  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    |
  | GNU General Public License for more details.                     |
  +------------------------------------------------------------------+
-*/ 
+ */  
+    $current_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $host=$_SERVER['HTTP_HOST'].'/downloader/';
+    if (strpos($current_link, $host ) !== false) {
+		return; // firewall does not support magento connect downloader term in the URL without this condition. 
+	}
 	$mageFilename = 'app/Mage.php';
 	require_once $mageFilename;
-	Mage::setIsDeveloperMode(true);
-	ini_set('display_errors', 1);
+	//Mage::setIsDeveloperMode(true);
+	//ini_set('display_errors', 1);
 	umask(0);
 	Mage::app();
-	if(!Mage::helper('core')->isModuleEnabled('MageFire_Wall')) return;
+	if(!Mage::helper('core')->isModuleEnabled('MageFirewall_Firewall')) return;
     $resource = Mage::getSingleton('core/resource');
     $readConnection = $resource->getConnection('core_read'); 
-    $mageOptions = Mage::getModel('wall/options');
-    $wallHelper = Mage::helper('wall');
+    $mageOptions = Mage::getModel('firewall/options');
+    $wallHelper = Mage::helper('firewall');
 	if($wallHelper->getOptionsData('firewall_enable')==0) return;
     $ip_address = $wallHelper->getClientIp();
     $WhiteListQuery = "SELECT * FROM  ".$resource->getTableName('firewall_whitelist')."  WHERE status=1 && is_delete!=1 && ip='$ip_address'";
@@ -312,7 +317,7 @@ function nf_check_upload() {
    if ($tmp) {
 		if ($MagenfCheckDebug) { $nfdebug.= '[FAIL]   file upload attempt : '. nf_bin2hex_string($tmp) . ETAG; }
 		nf_write2log('File upload attempt', rtrim($tmp, ' '), 2, 0);
-		nf_block();
+		//nf_block();
 	}
 
    if ($MagenfCheckDebug) { $nfdebug.= '[----]   upload field is empty' . ETAG; }
@@ -361,7 +366,7 @@ function nf_write2log( $loginfo, $logdata, $loglevel, $ruleid ) {
       '[' . $http_ret_code . '] ' . '[' . $_SERVER['REQUEST_METHOD'] . '] ' .
       '[' . $_SERVER['SCRIPT_NAME'] . '] ' . '[' . $loginfo . '] ' .
       '[' . nf_bin2hex_string($logdata) . ']' . "\n";
-   Mage::getModel('wall/logs')
+   Mage::getModel('firewall/logs')
         ->setData(array('summary'=>$message,'ruleid'=>$ruleid,'level'=>$loglevel,'ip'=>$ip_address,'incidentid'=>$rand_value,'created_time'=>time()))
         ->save();
    Mage::log($message, null, "firewall_-".date('Y-m-d').".log");
