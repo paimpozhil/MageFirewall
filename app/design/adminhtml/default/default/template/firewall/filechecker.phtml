@@ -1,6 +1,6 @@
 <h1>Diagnostic Result</h1>
 <?php
-$wallHelper = Mage::helper('wall');
+$wallHelper = Mage::helper('firewall');
 $phpVs = 0;
 echo 'Magento version is: ', Mage::getVersion() . "<br />";
 if (version_compare(phpversion(), '5.3.0', '<')===true) {

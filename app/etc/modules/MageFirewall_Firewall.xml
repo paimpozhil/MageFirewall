@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageFirewall_Firewall>
+            <active>true</active>
+            <codePool>community</codePool>
+        </MageFirewall_Firewall>
+    </modules>
+</config> 
