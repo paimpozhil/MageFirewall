@@ -1,0 +1,4 @@
+app/code/community/MageFirewall/Firewall/ app/code/community/MageFirewall/Firewall/
+app/design/adminhtml/default/default/template/firewall/ app/design/adminhtml/default/default/template/firewall/
+app/etc/modules/MageFirewall_Firewall.xml app/etc/modules/MageFirewall_Firewall.xml
+lib/firewall/ lib/firewall/
