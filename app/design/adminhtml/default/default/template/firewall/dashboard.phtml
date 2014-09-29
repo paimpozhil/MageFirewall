@@ -11,7 +11,8 @@
 $wallHelper = Mage::helper('firewall');
 $getIncludedFile = get_included_files(); 
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
-$paths = $rootPath.'/lib/firewall/firewall.php';
+$libPath = Mage::getBaseDir('lib');
+$paths = $libPath.'/firewall/firewall.php';
 $optionsAll = Mage::getModel('firewall/options')->getCollection()->getData();
 $firewalFile = ini_get('auto_prepend_file');
 $autoprepend = '<b>No</b>.'; 
