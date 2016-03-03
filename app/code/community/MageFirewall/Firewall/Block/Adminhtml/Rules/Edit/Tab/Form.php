@@ -8,22 +8,40 @@ class MageFirewall_Firewall_Block_Adminhtml_Rules_Edit_Tab_Form extends Mage_Adm
       $this->setForm($form);
       $fieldset = $form->addFieldset('rules_form', array('legend'=>Mage::helper('firewall')->__('Rules information')));
      
-      $fieldset->addField('title', 'text', array(
-          'label'     => Mage::helper('firewall')->__('Title'),
+      $fieldset->addField('who', 'text', array(
+          'label'     => Mage::helper('firewall')->__('who'),
           'class'     => 'required-entry',
           'required'  => true,
-          'name'      => 'title',
+          'name'      => 'who',
       ));
-
-      $fieldset->addField('filename', 'file', array(
-          'label'     => Mage::helper('firewall')->__('File'),
-          'required'  => false,
-          'name'      => 'filename',
-	  ));
+      $fieldset->addField('request', 'text', array(
+          'label'     => Mage::helper('firewall')->__('request'),
+          'class'     => 'required-entry',
+          'required'  => true,
+          'name'      => 'request',
+      ));
+      $fieldset->addField('what', 'text', array(
+          'label'     => Mage::helper('firewall')->__('what'),
+          'class'     => 'required-entry',
+          'required'  => true,
+          'name'      => 'what',
+      ));
+      $fieldset->addField('why', 'text', array(
+          'label'     => Mage::helper('firewall')->__('why'),
+          'class'     => 'required-entry',
+          'required'  => true,
+          'name'      => 'why',
+      ));
+      $fieldset->addField('level', 'text', array(
+          'label'     => Mage::helper('firewall')->__('level'),
+          'class'     => 'required-entry',
+          'required'  => true,
+          'name'      => 'level',
+      ));
 		
-      $fieldset->addField('status', 'select', array(
+      $fieldset->addField('enabled', 'select', array(
           'label'     => Mage::helper('firewall')->__('Status'),
-          'name'      => 'status',
+          'name'      => 'enabled',
           'values'    => array(
               array(
                   'value'     => 1,
@@ -31,20 +49,19 @@ class MageFirewall_Firewall_Block_Adminhtml_Rules_Edit_Tab_Form extends Mage_Adm
               ),
 
               array(
-                  'value'     => 2,
+                  'value'     => 0,
                   'label'     => Mage::helper('firewall')->__('Disabled'),
               ),
           ),
-      ));
-     
-      $fieldset->addField('content', 'editor', array(
+      ));  
+      /*$fieldset->addField('content', 'editor', array(
           'name'      => 'content',
           'label'     => Mage::helper('firewall')->__('Content'),
           'title'     => Mage::helper('firewall')->__('Content'),
           'style'     => 'width:700px; height:500px;',
           'wysiwyg'   => false,
           'required'  => true,
-      ));
+      ));*/
      
       if ( Mage::getSingleton('adminhtml/session')->getRulesData() )
       {

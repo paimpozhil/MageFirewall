@@ -8,7 +8,7 @@ class MageFirewall_Firewall_Block_Adminhtml_Rules_Edit extends Mage_Adminhtml_Bl
                  
         $this->_objectId = 'id';
         $this->_blockGroup = 'firewall';
-        $this->_controller = 'adminhtml_firewall';
+        $this->_controller = 'adminhtml_rules';
         
         $this->_updateButton('save', 'label', Mage::helper('firewall')->__('Save Rules'));
         $this->_updateButton('delete', 'label', Mage::helper('firewall')->__('Delete Rules'));
@@ -37,7 +37,7 @@ class MageFirewall_Firewall_Block_Adminhtml_Rules_Edit extends Mage_Adminhtml_Bl
     public function getHeaderText()
     {
         if( Mage::registry('rules_data') && Mage::registry('rules_data')->getId() ) {
-            return Mage::helper('firewall')->__("Edit rules '%s'", $this->htmlEscape(Mage::registry('rules_data')->getTitle()));
+            return Mage::helper('firewall')->__("Edit rules '%s'", $this->htmlEscape(Mage::registry('rules_data')->getId()));
         } else {
             return Mage::helper('firewall')->__('Add rules');
         }

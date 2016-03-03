@@ -7,6 +7,6 @@
             $this->_blockGroup = 'firewall';
             $this->_headerText = Mage::helper('firewall')->__('Rules List');
             parent::__construct();            
-            $this->_removeButton('add');
+            //$this->_removeButton('add');
         }
     }

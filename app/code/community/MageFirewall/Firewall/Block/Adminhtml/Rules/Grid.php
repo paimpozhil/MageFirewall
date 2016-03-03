@@ -36,6 +36,7 @@ class MageFirewall_Firewall_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
 			'header'    => Mage::helper('firewall')->__('Request'),
 			'align'     => 'left',
 			'index'     => 'request',
+			'style'    => 'width:80px',
         ));
         $this->addColumn('what', array(
 			'header'    => Mage::helper('firewall')->__('What'),
@@ -52,11 +53,17 @@ class MageFirewall_Firewall_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
 			'align'     => 'left',
 			'index'     => 'level',
         ));
-       $this->addColumn('enabled', array(
-			'header'    => Mage::helper('firewall')->__('Status'),
-			'align'     => 'left',
-			'index'     => 'enabled',
-        ));
+        $this->addColumn('enabled', array(
+          'header'    => Mage::helper('firewall')->__('Status'),
+          'align'     => 'left',
+          'width'     => '80px',
+          'index'     => 'enabled',
+          'type'      => 'options',
+          'options'   => array(
+              1 => 'Enabled',
+              0 => 'Disabled',
+          ),
+		));
         /* $this->addColumn('comments', array(
 			'header'    => Mage::helper('paymentcapture')->__('Status Message'),
 			'align'     => 'left',
@@ -93,4 +100,9 @@ array(
 	{
 	  return $this->getUrl('*/*/grid', array('_current'=>true));
 	}
+
+	  public function getRowUrl($row)
+	  { 
+		  return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+	  }
 }

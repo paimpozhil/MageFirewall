@@ -34,7 +34,7 @@ class MageFirewall_Firewall_Adminhtml_BlacklistController extends Mage_Adminhtml
 			Mage::register('blacklist_data', $model);
 
 			$this->loadLayout();
-			$this->_setActiveMenu('blacklist/items');
+			$this->_setActiveMenu('firewall/blacklist');
 
 			$this->_addBreadcrumb(Mage::helper('adminhtml')->__('BlackList Manager'), Mage::helper('adminhtml')->__('BlackList Manager'));
 

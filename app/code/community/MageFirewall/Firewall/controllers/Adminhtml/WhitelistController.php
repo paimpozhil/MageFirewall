@@ -34,7 +34,7 @@ class MageFirewall_Firewall_Adminhtml_WhitelistController extends Mage_Adminhtml
 			Mage::register('whitelist_data', $model);
 
 			$this->loadLayout();
-			$this->_setActiveMenu('whitelist/items');
+			$this->_setActiveMenu('firewall/whitelist');
 
 			$this->_addBreadcrumb(Mage::helper('adminhtml')->__('Whitelist Manager'), Mage::helper('adminhtml')->__('Whitelist Manager'));
 
